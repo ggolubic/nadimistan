@@ -10,7 +10,7 @@ def start_spider(name):
 
 
 if __name__ == "__main__":
-    
+
     # Start spiders, process.start() blocks untill finished
     # Run in parallel (have to swich database to mysql)
     # start_spider("njuskalo")
