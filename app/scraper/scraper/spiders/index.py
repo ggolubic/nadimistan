@@ -57,7 +57,7 @@ class IndexSpider(scrapy.Spider):
     def parse_oglas(self, response):
         oglas = BaseOglasItemIndex()
 
-        scraped = datetime.datetime().now()
+        scraped = datetime.datetime.now()
         title = response.xpath('//div[@class="likeH1"]/text()').extract_first().strip()
         cijena = (
             response.xpath(
@@ -105,6 +105,6 @@ class IndexSpider(scrapy.Spider):
         oglas["dostupno_od"] = dir.get("dostupno_od", "")
         oglas["rezije"] = dir.get("režije", "")
         oglas["mail"] = dir.get("email", "")
-        oglas["mob"] = dir.get("tel_ili_mobitel", "")
+        oglas["contact"] = dir.get("tel_ili_mobitel", "")
 
         return oglas
