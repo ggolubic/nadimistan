@@ -10,7 +10,7 @@ class IndexSpider(scrapy.Spider):
     url_base = "https://www.index.hr"
     scrape_type = "/najam-stanova"
     allowed_domains = ["index.hr"]
-    start_urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=10"]
+    start_urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=100"]
 
     custom_settings = {
         "FEED_FORMAT": "csv",
