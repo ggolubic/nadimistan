@@ -69,3 +69,28 @@ class Oglas(BaseModel):
 
     class Meta:
         pass
+
+    @property
+    def serialize(self):
+        data = {
+            "link": self.link,
+            "title": self.title,
+            "cijena": self.cijena,
+            "opis": self.opis,
+            "zupanija": self.zupanija.ime,
+            "grad": self.grad.ime,
+            "naselje": self.naselje.ime,
+            "m2": self.m2,
+            "kat": self.kat,
+            "broj_soba": self.broj_soba,
+            "namjesten": self.namjesten,
+            "parking": self.parking,
+            "dostupno_od": self.dostupno_od,
+            "rezije": self.rezije,
+            "mail": self.mail,
+            "contact": self.contact,
+            "active": self.active,
+            "last_active": self.last_active,
+        }
+
+        return data
