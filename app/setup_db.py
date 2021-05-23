@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from peewee import PostgresqlDatabase
-from scraper.OglasModel import Zupanija, Grad, Naselje, Oglas
+from models.Oglas import Zupanija, Grad, Naselje, Oglas
 
 load_dotenv()
 env = os.environ
