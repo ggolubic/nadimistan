@@ -4,6 +4,7 @@ from peewee import (
     CharField,
     ForeignKeyField,
     TextField,
+    DateTimeField,
     IntegerField,
     BooleanField,
     PostgresqlDatabase,
@@ -51,6 +52,7 @@ class Oglas(BaseModel):
     link = TextField(unique=True)
     title = CharField()
     cijena = CharField()
+    cijena_parsed = IntegerField()
     opis = TextField()
     zupanija = ForeignKeyField(Zupanija)
     grad = ForeignKeyField(Grad)
@@ -66,6 +68,7 @@ class Oglas(BaseModel):
     contact = CharField()
     active = BooleanField(default=True)
     last_active = TextField()
+    scraped = DateTimeField()
 
     class Meta:
         pass
