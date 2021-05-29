@@ -2,8 +2,6 @@ from fastapi import FastAPI, Response
 from pandas import DataFrame
 import json
 
-
-from tasks.crawling import find_eligible_entries
 from tasks.task_app import scheduler
 from models.Oglas import Zupanija, Oglas, Naselje, Grad
 
@@ -33,6 +31,3 @@ async def get_test_csv():
         return data
         # return Response(data, 200)
         # return {"status_code": 200}
-
-
-# print(find_eligible_entries(cijena=3000, grad="Split"))
