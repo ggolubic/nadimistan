@@ -3,6 +3,7 @@ from time import sleep
 import datetime
 import operator
 
+from helpers.email import send_listings_email
 from models.Oglas import Oglas, Zupanija, Naselje, Grad
 from .task_app import scheduler
 
@@ -21,6 +22,8 @@ def find_eligible_entries(**args):
                 expression = Naselje.ime.contains(v.lower())
             elif k == "zupanija":
                 expression = Zupanija.ime.contains(v.lower())
+            elif isinstance(v, int):
+                expression = getattr(Oglas, k) <= v
             else:
                 expression = getattr(Oglas, k).contains(v.lower())
 
@@ -33,18 +36,16 @@ def find_eligible_entries(**args):
                 expression &= Naselje.ime.contains(v.lower())
             elif k == "zupanija":
                 expression &= Zupanija.ime.contains(v.lower())
+            elif isinstance(v, int):
+                expression &= getattr(Oglas, k) <= v
             else:
                 expression &= getattr(Oglas, k).contains(v.lower())
 
     query = (
         Oglas.select(
             Oglas.link,
+            Oglas.title,
             Oglas.cijena,
-            Oglas.opis,
-            Oglas.m2,
-            Oglas.kat,
-            Oglas.broj_soba,
-            Oglas.dostupno_od,
         )
         .join(Zupanija)
         .switch(Oglas)
@@ -60,20 +61,26 @@ def find_eligible_entries(**args):
         )
         # .execute()
     )
+    return query
 
 
-# @scheduler.scheduled_job(
-#     # trigger="cron",
-#     # hour=17,
-#     # minute=0,
-#     trigger="interval",
-#     minutes=10,
-#     id="daily_crawl",
-#     coalesce=True,
-#     misfire_grace_time=None,
-# )
-# def init_crawling():
-#     find_eligible_entries(cijena=3000, grad="Split")
+@scheduler.scheduled_job(
+    trigger="cron",
+    hour=17,
+    minute=0,
+    # trigger="interval",
+    # minutes=15,
+    id="daily_crawl",
+    coalesce=True,
+    misfire_grace_time=None,
+)
+def init_crawling():
+    raw = find_eligible_entries(cijena=3000, grad="Split", kat=2)
+    items = [item for item in raw.dicts()]
+    if items:
+        send_listings_email(items)
+
+
 # print("im running a job")
 # start_spider("index")
 

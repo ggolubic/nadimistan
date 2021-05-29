@@ -12,11 +12,13 @@ from peewee import (
 import os
 
 env = os.environ
+
 database = PostgresqlDatabase(
     "nadimistan",
     user=env.get("DB_USER"),
     password=env.get("DB_USER_PWD"),
-    host=env.get("DB_HOST"),
+    host="localhost",
+    port=5432,
 )
 
 
