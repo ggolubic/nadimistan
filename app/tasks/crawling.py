@@ -1,4 +1,4 @@
-# from ...scraper.scraper.start_spider import start_spider
+from scraper.start_spider import start_spider
 from time import sleep
 import datetime
 import operator
@@ -64,25 +64,29 @@ def find_eligible_entries(**args):
     return query
 
 
+# @scheduler.scheduled_job(
+#     trigger="cron",
+#     hour=17,
+#     minute=0,
+#     # trigger="interval",
+#     # minutes=15,
+#     id="daily_crawl",
+#     coalesce=True,
+#     misfire_grace_time=None,
+# )
+# def init_daily_crawling():
+#     raw = find_eligible_entries(cijena=3000, grad="Split", kat=2)
+#     items = [item for item in raw.dicts()]
+#     if items:
+#         send_listings_email(items)
+
+
 @scheduler.scheduled_job(
-    trigger="cron",
-    hour=17,
-    minute=0,
-    # trigger="interval",
-    # minutes=15,
-    id="daily_crawl",
+    trigger="interval",
+    minutes=30,
+    id="short_crawl",
     coalesce=True,
     misfire_grace_time=None,
 )
-def init_crawling():
-    raw = find_eligible_entries(cijena=3000, grad="Split", kat=2)
-    items = [item for item in raw.dicts()]
-    if items:
-        send_listings_email(items)
-
-
-# print("im running a job")
-# start_spider("index")
-
-
-# init_crawling()
+def init_short_crawling(name, **kwargs):
+    start_spider(name, **kwargs)

@@ -6,38 +6,24 @@ from ..items import BaseOglasItemIndex
 
 
 class IndexSpider(scrapy.Spider):
+    def __init__(self, pagination):
+        self.name = "index"
+        self.pagination = pagination
+
     name = "index"
     url_base = "https://www.index.hr"
     scrape_type = "/najam-stanova"
     allowed_domains = ["index.hr"]
-    start_urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=100"]
+    start_urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=10"]
 
-    custom_settings = {
-        "FEED_FORMAT": "csv",
-        "FEED_URI": "test.csv",
-        "FEED_EXPORT_FIELDS": [
-            "link",
-            "scraped",
-            "title",
-            "cijena",
-            "opis",
-            "objavljen",
-            "zupanija",
-            "grad",
-            "naselje",
-            "broj_soba",
-            "kat",
-            "m2",
-            "namjesten",
-            "parking",
-            "dostupno_od",
-            "rezije",
-            "mail",
-            "mob",
-        ],
-    }
+    def start_requests(self):
+        urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=10"]
+        for url in urls:
+            yield scrapy.Request(
+                url, callback=self.parse, cb_kwargs={"limited_pages": self.pagination}
+            )
 
-    def parse(self, response):
+    def parse(self, response, limited_pages):
 
         links_oglasi = response.xpath(
             '//div[@class="results"]/div[@class="OglasiRezHolder"]/a/@href'
@@ -51,8 +37,12 @@ class IndexSpider(scrapy.Spider):
         ).extract_first()
 
         if pagination:
+            if limited_pages and int(pagination[-1]) >= limited_pages:
+                return
             next_page = f"{self.url_base}{pagination}"
-            yield scrapy.Request(next_page, self.parse)
+            yield scrapy.Request(
+                next_page, self.parse, cb_kwargs={"limited_pages": self.pagination}
+            )
 
     def parse_oglas(self, response):
         oglas = BaseOglasItemIndex()
