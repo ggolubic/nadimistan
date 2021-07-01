@@ -1,7 +1,6 @@
 from scraper.start_spider import start_spider
 from time import sleep
 import datetime
-import operator
 
 from helpers.email import send_listings_email
 from models.Oglas import Oglas, Zupanija, Naselje, Grad
@@ -84,9 +83,9 @@ def find_eligible_entries(**args):
 @scheduler.scheduled_job(
     trigger="interval",
     minutes=30,
-    id="short_crawl",
+    id="short_index_crawl",
     coalesce=True,
     misfire_grace_time=None,
 )
-def init_short_crawling(name, **kwargs):
-    start_spider(name, **kwargs)
+def init_short_index_crawling():
+    start_spider("index", pagination=5)

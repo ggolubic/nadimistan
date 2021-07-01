@@ -10,11 +10,8 @@ class IndexSpider(scrapy.Spider):
         self.name = "index"
         self.pagination = pagination
 
-    name = "index"
     url_base = "https://www.index.hr"
-    scrape_type = "/najam-stanova"
     allowed_domains = ["index.hr"]
-    start_urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=10"]
 
     def start_requests(self):
         urls = ["https://www.index.hr/oglasi/najam-stanova/gid/3279?elementsNum=10"]
