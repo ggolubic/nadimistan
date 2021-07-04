@@ -3,7 +3,6 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Typography from 'antd/lib/typography';
 import Title from 'antd/lib/typography/Title';
-import Text from 'antd/lib/typography/Text';
 import Link from 'antd/lib/typography/Link';
 
 import Button from 'components/common/Button';
@@ -49,7 +48,7 @@ const Login = () => {
           </Actions>
         </Form.Item>
         <Button type="link" onClick={handleResetPassword}>
-          <Text underline>I forgot my password</Text>
+          I forgot my password
         </Button>
       </Form>
     </Wrapper>
