@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Typography from 'antd/lib/typography';
@@ -9,7 +10,10 @@ import Button from 'components/common/Button';
 import { Wrapper, Actions } from './index.styled';
 
 const Login = () => {
+  const history = useHistory();
+
   const handleOnFinish = val => {
+    history.push('/');
     console.log(val);
   };
 

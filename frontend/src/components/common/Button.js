@@ -11,7 +11,8 @@ const Button = styled(props => <AntdButton {...props} />)`
       > span {
         text-decoration: underline;
       }
-    `}
+    `};
+  ${({ color }) => `background-color:${color}`}
 `;
 
 export default Button;
