@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import 'antd/dist/antd.css';
 import { AuthContainer, BackgroundContainer, RouteContainer, RouteWrapper } from './Auth.styled';
 
 import Login from './scenes/Login';

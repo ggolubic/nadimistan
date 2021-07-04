@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-import './index.css';
-
+// import 'antd/dist/antd.dark.css';
+import 'antd/dist/antd.css';
 import Auth from 'components/scenes/Auth';
 
 const App = () => (
