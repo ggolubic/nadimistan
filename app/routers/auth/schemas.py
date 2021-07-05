@@ -24,14 +24,11 @@ class Subscription(SubscriptionBase):
 
 class UserBase(BaseModel):
     email: str
+    full_name: str
 
 
 class UserCreate(UserBase):
     password: str
-
-
-class UserInDB(UserBase):
-    hashed_password: str
 
 
 class User(UserBase):
@@ -41,3 +38,16 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserInDB(User):
+    hashed_password: str
+
+
+class AuthenticatedUser(User):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    email: Optional[str] = None

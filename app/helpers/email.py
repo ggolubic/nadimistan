@@ -1,20 +1,18 @@
-import email, smtplib, ssl, os
+import email, smtplib, ssl
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from dotenv import load_dotenv
-
-load_dotenv()
+from config import config
 
 port = 465
 
 
 def send_listings_email(listings=[]):
 
-    sender_email = os.environ.get("SERVICE_EMAIL")
-    receiver_email = os.environ.get("TESTING_RECEIVER_EMAIL")
-    password = os.environ.get("EMAIL_PASSWORD")
+    sender_email = config.SERVICE_EMAIL
+    receiver_email = config.TESTING_RECEIVER_EMAIL
+    password = config.EMAIL_PASSWORD
     subject = "New listings notification"
 
     message = MIMEMultipart("alternative")
