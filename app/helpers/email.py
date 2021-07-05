@@ -1,20 +1,46 @@
-import email, smtplib, ssl, os
+import email, smtplib, ssl
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from dotenv import load_dotenv
-
-load_dotenv()
+from config import config
 
 port = 465
 
 
+def send_registration_email(user):
+    sender_email = config.SERVICE_EMAIL
+    receiver_email = user.email
+    password = config.EMAIL_PASSWORD
+    subject = "Dobrodosli na nadimistan!"
+
+    message = MIMEMultipart("alternative")
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    text = f"""
+        Pozdrav {user.full_name},
+        Uspjesno ste se registrirali na stranicu Nadimistan.\n
+        Nadamo se da cete biti uspjesni u potrazi za stanom!
+    """
+
+    part1 = MIMEText(text, "plain")
+
+    message.attach(part1)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+        print(f"Mail sent to {receiver_email}")
+
+
 def send_listings_email(listings=[]):
 
-    sender_email = os.environ.get("SERVICE_EMAIL")
-    receiver_email = os.environ.get("TESTING_RECEIVER_EMAIL")
-    password = os.environ.get("EMAIL_PASSWORD")
+    sender_email = config.SERVICE_EMAIL
+    receiver_email = config.TESTING_RECEIVER_EMAIL
+    password = config.EMAIL_PASSWORD
     subject = "New listings notification"
 
     message = MIMEMultipart("alternative")

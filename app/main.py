@@ -1,12 +1,26 @@
 from fastapi import FastAPI, Response
+from fastapi.middleware.cors import CORSMiddleware
 from pandas import DataFrame
 import json
 
 from tasks.task_app import scheduler
 from models.Oglas import Zupanija, Oglas, Naselje, Grad
+from routers.auth import auth
+from routers.subscriptions import subscriptions
 
 
 app = FastAPI()
+app.include_router(auth.router)
+app.include_router(subscriptions.router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_credentials=True,
+    allow_headers=["*"],
+    allow_methods=["*"],
+    allow_origins=["*"],
+)
+
 scheduler.start()
 
 
