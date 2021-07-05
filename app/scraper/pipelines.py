@@ -5,7 +5,7 @@
 import logging
 import datetime
 from peewee import DoesNotExist
-from ...models.Oglas import Oglas, Naselje, Grad, Zupanija
+from models.Oglas import Oglas, Naselje, Grad, Zupanija
 
 
 class PersistData(object):
