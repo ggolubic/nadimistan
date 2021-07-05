@@ -5,7 +5,6 @@ from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 from helpers.database import get_db, SessionLocal, engine
 from config import config
 
@@ -36,23 +35,6 @@ fake_users_db = {
 }
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-
-def get_user(db, email: str):
-    for user_name in db:
-        if email in db[user_name].values():
-            user_dict = db[user_name]
-            print(user_dict)
-            return schemas.UserInDB(**user_dict)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
@@ -68,16 +50,19 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-def authenticate_user(fake_db, email: str, password: str):
-    user = get_user(fake_db, email)
+def authenticate_user(db, email: str, password: str):
+    user = crud.get_user_by_email(db, email)
     if not user:
         return None
-    if not verify_password(password, user.hashed_password):
+    if not crud.verify_password(password, user.hashed_password):
         return None
     return user
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -91,7 +76,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = schemas.TokenData(email=email)
     except JWTError:
         raise credentials_exception
-    user = get_user(fake_users_db, email=token_data.email)
+    user = crud.get_user_by_email(db, email=token_data.email)
     if user is None:
         raise credentials_exception
     return user
@@ -106,8 +91,10 @@ async def get_current_active_user(
 
 
 @router.post("/login", tags=["auth"], response_model=schemas.AuthenticatedUser)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -118,8 +105,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
+    # hacky solution - look for better solution
     authenticated_user = schemas.AuthenticatedUser(
-        access_token=access_token, token_type="bearer", **user.dict()
+        access_token=access_token, token_type="bearer", **user.__dict__
     )
     return authenticated_user
 
