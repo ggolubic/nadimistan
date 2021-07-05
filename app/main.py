@@ -5,11 +5,13 @@ import json
 
 from tasks.task_app import scheduler
 from models.Oglas import Zupanija, Oglas, Naselje, Grad
-from routers.auth import main
+from routers.auth import auth
+from routers.subscriptions import subscriptions
 
 
 app = FastAPI()
-app.include_router(main.router)
+app.include_router(auth.router)
+app.include_router(subscriptions.router)
 
 app.add_middleware(
     CORSMiddleware,

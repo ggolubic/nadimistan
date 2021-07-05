@@ -15,24 +15,6 @@ models.Base.metadata.create_all(bind=engine)
 
 router = APIRouter()
 
-fake_users_db = {
-    "alice": {
-        "id": 1,
-        "username": "alice",
-        "full_name": "Alice Wonderson",
-        "email": "alice@example.com",
-        "hashed_password": "fakehashedsecret2",
-        "is_active": True,
-    },
-    "bob": {
-        "id": 2,
-        "username": "bob",
-        "full_name": "John Doe",
-        "email": "johndoe@example.com",
-        "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
-        "is_active": False,
-    },
-}
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -69,7 +51,9 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+        payload = jwt.decode(
+            token, config.SECRET_KEY, algorithms=[config.HASHING_ALGORITHM]
+        )
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
@@ -105,7 +89,7 @@ async def login(
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    # hacky solution - look for better solution
+    # hacky  - look for better solution
     authenticated_user = schemas.AuthenticatedUser(
         access_token=access_token, token_type="bearer", **user.__dict__
     )
@@ -121,30 +105,5 @@ def fetch_user(user: schemas.UserBase, db: Session = Depends(get_db)):
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=409, detail="Email already registered")
     return crud.create_user(db=db, user=user)
-
-
-@router.post(
-    "/users/{user_id}/subscriptions/",
-    tags=["subscriptions"],
-    response_model=schemas.Subscription,
-)
-def create_subscription_for_user(
-    user_id: int,
-    subscription: schemas.SubscriptionCreate,
-    db: Session = Depends(get_db),
-):
-    return crud.create_user_subscription(db=db, sub=subscription, user_id=user_id)
-
-
-@router.get(
-    "/users/{user_id}/subscriptions",
-    tags=["subscriptions"],
-    response_model=schemas.Subscription,
-)
-def fetch_user_subscriptions(user_id: int, db: Session = Depends(get_db)):
-    return crud.get_subscriptions(
-        db=db,
-        user_id=user_id,
-    )

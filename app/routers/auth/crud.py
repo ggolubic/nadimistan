@@ -34,23 +34,3 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     send_registration_email(db_user)
     return db_user
-
-
-def get_subscriptions(db: Session, user_id: int, skip: int = 0, limit: int = 100):
-    return (
-        db.query(models.Subscription)
-        .filter(models.Subscription.owner_id == user_id)
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
-
-
-def create_user_subscription(
-    db: Session, sub: schemas.SubscriptionCreate, user_id: int
-):
-    db_sub = models.Subscription(**sub.dict(), owner_id=user_id)
-    db.add(db_sub)
-    db.commit()
-    db.refresh(db_sub)
-    return db_sub

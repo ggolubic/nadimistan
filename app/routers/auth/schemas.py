@@ -1,25 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel
 from datetime import datetime
-
-
-class SubscriptionBase(BaseModel):
-    config: dict
-    interval: int
-
-
-class SubscriptionCreate(SubscriptionBase):
-    pass
-
-
-class Subscription(SubscriptionBase):
-    id: int
-    user_id: int
-    disabled: bool
-    last_active: datetime
-
-    class Config:
-        orm_mode = True
+from routers.subscriptions.schemas import Subscription
 
 
 class UserBase(BaseModel):
@@ -51,3 +33,15 @@ class AuthenticatedUser(User):
 
 class TokenData(BaseModel):
     email: Optional[str] = None
+
+
+def ResponseModel(data, message: Optional[str]):
+    return {
+        "data": [data],
+        "code": 200,
+        "message": message,
+    }
+
+
+def ErrorResponseModel(error, code, message):
+    return {"error": error, "code": code, "message": message}
