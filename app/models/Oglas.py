@@ -81,6 +81,7 @@ class Oglas(BaseModel):
             "link": self.link,
             "title": self.title,
             "cijena": self.cijena,
+            "cijena_parsed": self.cijena_parsed,
             "opis": self.opis,
             "zupanija": self.zupanija.ime,
             "grad": self.grad.ime,
@@ -96,6 +97,7 @@ class Oglas(BaseModel):
             "contact": self.contact,
             "active": self.active,
             "last_active": self.last_active,
+            "scraped": self.scraped,
         }
 
         return data
