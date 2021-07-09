@@ -7,11 +7,15 @@ from tasks.task_app import scheduler
 from models.Oglas import Zupanija, Oglas, Naselje, Grad
 from routers.auth import auth
 from routers.subscriptions import subscriptions
+from routers.oglasi import oglasi
+from routers.oglasi.crud import add_oglas, fetch_oglasi
+from helpers.update_mongo import update_many
 
 
 app = FastAPI()
 app.include_router(auth.router)
 app.include_router(subscriptions.router)
+app.include_router(oglasi.router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,18 +34,16 @@ async def root():
 
 
 @app.get("/test_data")
-async def get_test_csv():
+async def dump_data():
     query = (
         Oglas.select(Oglas, Zupanija, Naselje, Grad)
         .join(Zupanija)
+        .switch(Oglas)
         .join(Grad)
+        .switch(Oglas)
         .join(Naselje)
-        .limit(100)
     )
     data = [i.serialize for i in query]
     df = DataFrame.from_dict(data)
-    df.to_excel("sample.xlsx", "sheet1")
-    if data:
-        return data
-        # return Response(data, 200)
-        # return {"status_code": 200}
+    df.to_excel("dump.xlsx", "sheet1")
+    return data[0]
