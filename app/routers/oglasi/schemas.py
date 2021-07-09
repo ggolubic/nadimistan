@@ -37,9 +37,9 @@ class GETRequestModel(BaseRequestModel):
     zupanija: Optional[str]
     naselje: Optional[str]
     cijena: Optional[int]
-    cijena_order: str = "ASC"
+    cijena_vece_od: Optional[bool] = None
     m2: Optional[int]
-    m2_order: str = "ASC"
+    m2_vece_od: Optional[bool] = None
 
 
 def ResponseModel(data, message):

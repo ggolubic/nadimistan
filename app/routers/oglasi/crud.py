@@ -4,19 +4,23 @@ from . import schemas
 from datetime import datetime
 
 
-async def fetch_oglasi(*args):
-    # oglasi = []
-    filters = list(filter(lambda x: x[1] != None, args))
-    # list(filters)
-    print(filters)
-    # for arg in args:
-    #     print(arg)
-    # print(args, "Jel to ovaj u fecu")
-    # async for oglas in oglasi_collection.find(
-    #     {"grad": "split", "m2": {"$lt": 50}}
-    # ).limit(limit).skip(skip):
-    #     oglasi.append(oglas_helper(oglas))
-    # return oglasi
+async def fetch_oglasi(skip, limit, offset, **args):
+    oglasi = []
+    query = {}
+    filters = list(filter(lambda x: x[1] != None, args.items()))
+    for arg in filters:
+        if arg[0] == "cijena":
+            query["cijena_parsed"] = {"$lt": args["cijena"]}
+        elif arg[0] == "m2":
+            query["m2"] = {"$gt" if args["m2_vece_od"] else "$lt": args["m2"]}
+        elif arg[0].endswith("vece_od"):
+            continue
+        else:
+            query[arg[0]] = arg[1]
+
+    async for oglas in oglasi_collection.find(query).skip(skip + offset).limit(limit):
+        oglasi.append(oglas_helper(oglas))
+    return oglasi
 
 
 # Add a new oglas into to the database
