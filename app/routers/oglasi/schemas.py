@@ -27,9 +27,8 @@ class Oglas(BaseModel):
 
 
 class BaseRequestModel(BaseModel):
-    skip: int = 0
-    offset: int = 0
-    limit: int = 20
+    page: int = 0
+    per_page: int = 20
 
 
 class GETRequestModel(BaseRequestModel):
@@ -37,9 +36,9 @@ class GETRequestModel(BaseRequestModel):
     zupanija: Optional[str]
     naselje: Optional[str]
     cijena: Optional[int]
-    cijena_order: str = "ASC"
+    cijena_vece_od: Optional[bool] = None
     m2: Optional[int]
-    m2_order: str = "ASC"
+    m2_vece_od: Optional[bool] = None
 
 
 def ResponseModel(data, message):

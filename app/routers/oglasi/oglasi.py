@@ -16,5 +16,5 @@ async def fetch_oglasi(
     model: schemas.GETRequestModel = Depends(),
     user: AuthenticatedUser = Depends(get_current_user),
 ):
-    oglasi = await crud.fetch_oglasi(*model)
+    oglasi = await crud.fetch_oglasi(**model.dict())
     return oglasi
