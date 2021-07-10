@@ -4,7 +4,7 @@ from . import schemas
 from datetime import datetime
 
 
-async def fetch_oglasi(skip, limit, offset, **args):
+async def fetch_oglasi(page, per_page, **args):
     oglasi = []
     query = {}
     filters = list(filter(lambda x: x[1] != None, args.items()))
@@ -18,7 +18,9 @@ async def fetch_oglasi(skip, limit, offset, **args):
         else:
             query[arg[0]] = arg[1]
 
-    async for oglas in oglasi_collection.find(query).skip(skip + offset).limit(limit):
+    async for oglas in oglasi_collection.find(query).skip(page * per_page).limit(
+        per_page
+    ):
         oglasi.append(oglas_helper(oglas))
     return oglasi
 

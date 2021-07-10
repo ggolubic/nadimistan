@@ -27,9 +27,8 @@ class Oglas(BaseModel):
 
 
 class BaseRequestModel(BaseModel):
-    skip: int = 0
-    offset: int = 0
-    limit: int = 20
+    page: int = 0
+    per_page: int = 20
 
 
 class GETRequestModel(BaseRequestModel):
