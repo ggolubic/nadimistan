@@ -11,10 +11,10 @@ const ProtectedRoute = props => {
   const { user } = useCurrentUser();
 
   if (user) {
-    return <Route path={props.path} render={() => <Redirect to="/" />} />;
+    return <Route {...props} />;
   }
 
-  return <Route {...props} />;
+  return <Route path={props.path} render={() => <Redirect to="/" />} />;
 };
 
 const App = () => (
