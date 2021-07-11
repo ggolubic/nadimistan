@@ -1,11 +1,45 @@
-import React from 'react';
+import React, { useEffect, useLayoutEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import Paragraph from 'antd/lib/typography/Paragraph';
 
 import { PageWrapper, NavBar, HeroWrapper, Hero, Overlay, Banner, Brief } from './index.styled';
 import { Title } from 'components/common/Typography';
 import Login from 'components/scenes/Auth/scenes/Login';
+import { AuthContext } from 'components/services/Auth/AuthProvider';
+import { getCookie } from 'utils/cookie';
+import { setAuthToken } from 'utils/api';
 
-const Landing = () => {
+const Landing = ({ location }) => {
+  const history = useHistory();
+  const authCtx = useContext(AuthContext);
+
+  useLayoutEffect(() => {
+    const token = getCookie('ath');
+
+    if (token) {
+      setAuthToken(token);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!authCtx.user) {
+      return;
+    }
+
+    const { from } = location.state || {
+      from: { pathname: '/' },
+    };
+
+    if (from.pathname === '/') {
+      history.push(`/search`);
+      return;
+    }
+
+    if (!authCtx.loggingIn && !authCtx.loginError && authCtx.user) {
+      history.push(from.pathname);
+    }
+  }, [authCtx.loggingIn]);
+
   return (
     <PageWrapper>
       <NavBar>
