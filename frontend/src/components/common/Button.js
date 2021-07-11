@@ -7,7 +7,6 @@ const Button = styled(props => <AntdButton {...props} />)`
   ${({ type }) =>
     type === 'link' &&
     css`
-      padding-left: 0;
       > span {
         text-decoration: underline;
       }

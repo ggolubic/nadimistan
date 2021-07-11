@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
-import Typography from 'antd/lib/typography';
 import Title from 'antd/lib/typography/Title';
 import Link from 'antd/lib/typography/Link';
+import Alert from 'antd/lib/alert';
 
 import Button from 'components/common/Button';
+import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { Wrapper, Actions } from './index.styled';
 
 const Login = () => {
+  const authCtx = useContext(AuthContext);
+
   const handleOnFinish = val => {
-    console.log(val);
+    authCtx.login(val.email, val.password);
   };
 
   const handleResetPassword = val => {
@@ -19,9 +22,8 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <Typography>
-        <Title>Login</Title>
-      </Typography>
+      <Title level={3}>Login</Title>
+      {!!authCtx.loginError && <Alert type="error" closable message="Email or password wrong." />}
       <Form name="login-form" layout="vertical" onFinish={handleOnFinish} requiredMark={'optional'}>
         <Form.Item
           name="email"
@@ -39,11 +41,11 @@ const Login = () => {
         </Form.Item>
         <Form.Item>
           <Actions>
-            <Button type="primary" htmlType="submit" size="large">
+            <Button type="primary" htmlType="submit" size="large" loading={authCtx.loggingIn}>
               Log in
             </Button>
             <div>
-              Don't have an account? <Link href="/register">Register now!</Link>
+              Or <Link href="/register">Register now!</Link>
             </div>
           </Actions>
         </Form.Item>
