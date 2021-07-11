@@ -45,10 +45,15 @@ export const Banner = styled.div`
   justify-content: center;
   text-align: center;
   margin: 0 auto;
-  min-width: 350px;
   background-color: #fffbf4;
   border-radius: 5px;
   z-index: 4;
+  @media only screen and (min-width: 320px) and (max-width: 400px) {
+    min-width: 320px;
+  }
+  @media only screen and (min-width: 400px) {
+    min-width: 350px;
+  }
 `;
 
 export const Brief = styled.div`
@@ -57,18 +62,40 @@ export const Brief = styled.div`
   text-align: center;
   margin-top: 30px;
   height: 100%;
-  width: 60%;
+  width: 80%;
   max-width: 660px;
   margin: 30px auto;
-  & > h2 {
-    margin-bottom: 30px;
-  }
-  & > div {
-    font-size: 20px;
-    text-align: justify;
-  }
+
   span {
     color: #4498e6;
     font-weight: 600;
+  }
+  & > div {
+    font-size: 14px;
+    text-align: justify;
+  }
+  & > h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+    width: 60%;
+    & > h2 {
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+    & > div {
+      font-size: 16px;
+      text-align: justify;
+    }
+  }
+  @media only screen and (min-width: 1024px) {
+    & > h2 {
+      font-size: 32px;
+    }
+    & > div {
+      font-size: 20px;
+      text-align: justify;
+    }
   }
 `;
