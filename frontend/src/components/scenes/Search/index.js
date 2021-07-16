@@ -5,11 +5,14 @@ import useCurrentUser from 'components/services/Auth/useCurrentUser';
 import Hero from 'components/common/Hero';
 import Button from 'components/common/Button';
 
+import PriceFilter from 'components/common/Filters/Price';
+
 import {
   PageWrapper,
   NavBar,
   HeroContent,
   FormBackground,
+  FiltersWrapper,
   SearchInputsWrapper,
 } from './index.styled';
 import UserInfo from './components/UserInfo';
@@ -31,6 +34,9 @@ const Search = () => {
         <HeroContent>
           <Title customColor="#fff">Pronadite buduci smjestaj vec danas</Title>
           <FormBackground>
+            <FiltersWrapper>
+              <PriceFilter value={form.price} onChange={val => setForm({ ...form, price: val })} />
+            </FiltersWrapper>
             <SearchInputsWrapper>
               <FormInput prefix="Zupanija:" onChange={val => setForm({ ...form, zupanija: val })} />
               <FormInput prefix="Grad:" onChange={val => setForm({ ...form, grad: val })} />

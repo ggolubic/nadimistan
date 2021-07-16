@@ -31,7 +31,7 @@ export const FormBackground = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #fff;
-  height: 150px;
+  height: 180px;
   width: 80%;
   padding: 20px;
   margin: 30px auto 0;
@@ -45,5 +45,13 @@ export const SearchInputsWrapper = styled.div`
     &:not(:last-child) {
       margin-right: 15px;
     }
+  }
+`;
+
+export const FiltersWrapper = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+  & > button {
+    width: max-content;
   }
 `;
