@@ -2,12 +2,14 @@ import React, { useEffect, useLayoutEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import Paragraph from 'antd/lib/typography/Paragraph';
 
-import { PageWrapper, NavBar, HeroWrapper, Hero, Overlay, Banner, Brief } from './index.styled';
 import { Title } from 'components/common/Typography';
+import Hero from 'components/common/Hero';
 import Login from 'components/scenes/Auth/scenes/Login';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { getCookie } from 'utils/cookie';
 import { setAuthToken } from 'utils/api';
+
+import { PageWrapper, NavBar, Banner, Brief } from './index.styled';
 
 const Landing = ({ location }) => {
   const history = useHistory();
@@ -47,14 +49,11 @@ const Landing = ({ location }) => {
           NadiMiStan
         </Title>
       </NavBar>
-      <HeroWrapper>
-        <Overlay />
-        <Hero>
-          <Banner>
-            <Login />
-          </Banner>
-        </Hero>
-      </HeroWrapper>
+      <Hero>
+        <Banner>
+          <Login />
+        </Banner>
+      </Hero>
       <Brief>
         <Title level={2} primaryColor>
           Dosta Vam je svakodnevnog scrollanja po raznim oglasnicima u potrazi za stanom?
