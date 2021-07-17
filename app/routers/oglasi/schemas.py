@@ -34,11 +34,9 @@ class BaseRequestModel(BaseModel):
 class GETRequestModel(BaseRequestModel):
     grad: Optional[str]
     zupanija: Optional[str]
-    naselje: Optional[str]
     cijena: Optional[int]
-    cijena_vece_od: Optional[bool] = None
     m2: Optional[int]
-    m2_vece_od: Optional[bool] = None
+    m2_greater: Optional[bool] = None
 
 
 def ResponseModel(data, message):
