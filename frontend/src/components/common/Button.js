@@ -11,8 +11,8 @@ const Button = styled(props => <AntdButton {...props} />)`
         text-decoration: underline;
       }
     `}
-  ${({ filterView }) =>
-    filterView &&
+  ${({ filterview }) =>
+    filterview &&
     css`
       border: none;
     `}
