@@ -6,6 +6,7 @@ import Landing from 'components/scenes/Landing';
 import Search from 'components/scenes/Search';
 import AuthProvider from 'components/services/Auth/AuthProvider';
 import useCurrentUser from 'components/services/Auth/useCurrentUser';
+import SearchProvider from './components/services/Search/SearchProvider';
 
 const ProtectedRoute = props => {
   const { user } = useCurrentUser();
@@ -19,12 +20,14 @@ const ProtectedRoute = props => {
 
 const App = () => (
   <AuthProvider>
-    <Router>
-      <Switch>
-        <Route path="/" exact component={Landing} />
-        <ProtectedRoute path="/search" component={Search} />
-      </Switch>
-    </Router>
+    <SearchProvider>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={Landing} />
+          <ProtectedRoute path="/search" component={Search} />
+        </Switch>
+      </Router>
+    </SearchProvider>
   </AuthProvider>
 );
 

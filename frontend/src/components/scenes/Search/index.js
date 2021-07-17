@@ -19,10 +19,11 @@ import {
 } from './index.styled';
 import UserInfo from './components/UserInfo';
 import FormInput from './components/FormInput';
+import SearchResults from './components/SearchResults';
 
 const Search = () => {
   const { user } = useCurrentUser();
-  const { fetchOglasi } = useSearch();
+  const { loadOglasi, loadingOglasi } = useSearch();
   const [form, setForm] = useState({});
   // const notifications=useUnreadNotifications(user.id)
 
@@ -30,13 +31,13 @@ const Search = () => {
     <PageWrapper>
       <NavBar>
         <Title fontSize={36} primaryColor>
-          NadiMiStan
+          NađiMiStan
         </Title>
         <UserInfo user={user} />
       </NavBar>
       <Hero>
         <HeroContent>
-          <Title customColor="#fff">Pronadite buduci smjestaj vec danas</Title>
+          <Title customColor="#fff">Pronađite budući smještaj već danas</Title>
           <FormBackground>
             <FiltersWrapper>
               <PriceFilter value={form.price} onChange={val => setForm({ ...form, price: val })} />
@@ -51,12 +52,18 @@ const Search = () => {
               <FormInput prefix="Zupanija:" onChange={val => setForm({ ...form, zupanija: val })} />
               <FormInput prefix="Grad:" onChange={val => setForm({ ...form, grad: val })} />
             </SearchInputsWrapper>
-            <Button type="primary" size="large" onClick={() => fetchOglasi(form)}>
+            <Button
+              type="primary"
+              size="large"
+              loading={loadingOglasi}
+              onClick={() => loadOglasi(form)}
+            >
               Pronađi
             </Button>
           </FormBackground>
         </HeroContent>
       </Hero>
+      <SearchResults />
     </PageWrapper>
   );
 };

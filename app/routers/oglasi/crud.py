@@ -18,9 +18,7 @@ async def fetch_oglasi(page, per_page, **args):
         else:
             query[arg[0]] = arg[1]
 
-    async for oglas in oglasi_collection.find(query).skip(page * per_page).limit(
-        per_page
-    ):
+    async for oglas in oglasi_collection.find(query).skip(page * per_page).limit(500):
         oglasi.append(oglas_helper(oglas))
     return oglasi
 
