@@ -23,12 +23,12 @@ let _token = null;
 
 export const setAuthToken = token => {
   _token = token;
-  api.defaults.headers.common['WWW-Authenticate'] = `Bearer ${token}`;
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
 export const removeAuthToken = () => {
   _token = null;
-  delete api.defaults.headers.common['WWW-Authenticate'];
+  delete api.defaults.headers.common['Authorization'];
 };
 
 export const getToken = () => {

@@ -1,7 +1,7 @@
 import React, { useReducer, createContext } from 'react';
 
 import { fromLogin } from 'mappers/auth';
-import api from 'utils/api';
+import api, { setAuthToken } from 'utils/api';
 import { removeCookie, setCookie } from 'utils/cookie';
 
 export const AuthContext = createContext({});
@@ -47,7 +47,8 @@ const AuthProvider = ({ children }) => {
           'content-type': 'application/x-www-form-urlencoded',
         },
       });
-      setCookie('ath', res.data.token);
+      setAuthToken(res.data.access_token);
+      setCookie('ath', res.data.access_token);
       dispatch({ type: 'LOGIN_SUCCESS', payload: fromLogin(res.data) });
     } catch (err) {
       removeCookie('ath');
