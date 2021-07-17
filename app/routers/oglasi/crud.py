@@ -12,15 +12,13 @@ async def fetch_oglasi(page, per_page, **args):
         if arg[0] == "cijena":
             query["cijena_parsed"] = {"$lt": args["cijena"]}
         elif arg[0] == "m2":
-            query["m2"] = {"$gt" if args["m2_vece_od"] else "$lt": args["m2"]}
-        elif arg[0].endswith("vece_od"):
+            query["m2"] = {"$gt" if args["m2_greater"] else "$lt": args["m2"]}
+        elif arg[0].endswith("greater"):
             continue
         else:
             query[arg[0]] = arg[1]
 
-    async for oglas in oglasi_collection.find(query).skip(page * per_page).limit(
-        per_page
-    ):
+    async for oglas in oglasi_collection.find(query).skip(page * per_page).limit(500):
         oglasi.append(oglas_helper(oglas))
     return oglasi
 

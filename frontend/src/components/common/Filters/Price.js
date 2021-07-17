@@ -48,7 +48,7 @@ const PriceOptions = ({ onChange, value }) => (
 const PriceFilter = ({ value, onChange }) => {
   return (
     <Dropdown overlay={<PriceOptions value={value} onChange={onChange} />} trigger={['click']}>
-      <Button onClick={e => e.preventDefault()} filterView>
+      <Button onClick={e => e.preventDefault()} filterview>
         Cijena: {value && `${value} kn`} <DownOutlined />
       </Button>
     </Dropdown>

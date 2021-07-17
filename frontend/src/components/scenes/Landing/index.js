@@ -46,7 +46,7 @@ const Landing = ({ location }) => {
     <PageWrapper>
       <NavBar>
         <Title fontSize={36} primaryColor>
-          NadiMiStan
+          NađiMiStan
         </Title>
       </NavBar>
       <Hero>

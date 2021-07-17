@@ -42,7 +42,7 @@ const SizeFilter = ({ value, onChange }) => {
       }
       trigger={['click']}
     >
-      <Button onClick={e => e.preventDefault()} filterView>
+      <Button onClick={e => e.preventDefault()} filterview>
         m2: {value && `${isGreater ? 'Od' : 'Do'} ${value}`} <DownOutlined />
       </Button>
     </Dropdown>

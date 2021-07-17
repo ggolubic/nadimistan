@@ -32,10 +32,15 @@ export const FormBackground = styled.div`
   flex-direction: column;
   background-color: #fff;
   height: 180px;
-  width: 80%;
   padding: 20px;
   margin: 30px auto 0;
   border-radius: 10px;
+  @media only screen and (min-width: 768px) and (max-width: 1024px) {
+    width: 90%;
+  }
+  @media only screen and (min-width: 1024px) {
+    width: 80%;
+  }
 `;
 
 export const SearchInputsWrapper = styled.div`
