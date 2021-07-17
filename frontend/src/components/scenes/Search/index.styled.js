@@ -53,5 +53,8 @@ export const FiltersWrapper = styled.div`
   margin-bottom: 10px;
   & > button {
     width: max-content;
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
   }
 `;

@@ -6,6 +6,7 @@ import Hero from 'components/common/Hero';
 import Button from 'components/common/Button';
 
 import PriceFilter from 'components/common/Filters/Price';
+import SizeFilter from 'components/common/Filters/Size';
 
 import {
   PageWrapper,
@@ -22,6 +23,8 @@ const Search = () => {
   const { user } = useCurrentUser();
   const [form, setForm] = useState({});
   // const notifications=useUnreadNotifications(user.id)
+
+  console.log(form);
   return (
     <PageWrapper>
       <NavBar>
@@ -36,6 +39,7 @@ const Search = () => {
           <FormBackground>
             <FiltersWrapper>
               <PriceFilter value={form.price} onChange={val => setForm({ ...form, price: val })} />
+              <SizeFilter value={form.size} onChange={val => setForm({ ...form, size: val })} />
             </FiltersWrapper>
             <SearchInputsWrapper>
               <FormInput prefix="Zupanija:" onChange={val => setForm({ ...form, zupanija: val })} />

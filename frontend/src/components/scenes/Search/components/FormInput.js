@@ -8,7 +8,7 @@ const StyledFormInput = styled(props => <Input {...props} />)`
 `;
 
 const FormInput = ({ prefix, onChange }) => {
-  return <StyledFormInput prefix={prefix} size="large" onChange={onChange} />;
+  return <StyledFormInput prefix={prefix} size="large" onChange={e => onChange(e.target.value)} />;
 };
 
 export default FormInput;
