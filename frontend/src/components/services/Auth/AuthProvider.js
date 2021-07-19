@@ -56,7 +56,17 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const value = { ...state, login };
+  const getSession = async () => {
+    dispatch({ type: 'LOGIN' });
+    try {
+      const res = await api.get('http://0.0.0.0:8000/session');
+      dispatch({ type: 'LOGIN_SUCCESS', payload: fromLogin(res.data) });
+    } catch (error) {
+      dispatch({ type: 'LOGIN_FAIL', error });
+    }
+  };
+
+  const value = { ...state, login, getSession };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

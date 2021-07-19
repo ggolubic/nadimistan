@@ -7,7 +7,7 @@ import Hero from 'components/common/Hero';
 import Login from 'components/scenes/Auth/scenes/Login';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { getCookie } from 'utils/cookie';
-import { setAuthToken } from 'utils/api';
+import { setAuthToken, removeAuthToken } from 'utils/api';
 
 import { PageWrapper, NavBar, Banner, Brief } from './index.styled';
 
@@ -20,7 +20,11 @@ const Landing = ({ location }) => {
 
     if (token) {
       setAuthToken(token);
+      authCtx.getSession();
     }
+    return () => {
+      removeAuthToken();
+    };
   }, []);
 
   useEffect(() => {
