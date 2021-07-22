@@ -7,9 +7,9 @@ from ..items import BaseOglasItemIndex
 
 class IndexSpider(scrapy.Spider):
     def __init__(self, pagination):
-        self.name = "index"
         self.pagination = pagination
 
+    name = "index"
     url_base = "https://www.index.hr"
     allowed_domains = ["index.hr"]
 

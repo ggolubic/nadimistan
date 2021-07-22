@@ -15,6 +15,7 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     HASHING_ALGORITHM = os.getenv("HASHING_ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+    MONGO_URI = os.getenv("MONGO_DETAILS")
 
 
 config = Config()

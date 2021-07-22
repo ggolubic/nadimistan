@@ -1,22 +1,22 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
+import crochet
 from pandas import DataFrame
-import uvicorn
-import json
 
 from tasks.task_app import scheduler
 from models.Oglas import Zupanija, Oglas, Naselje, Grad
 from routers.auth import auth
 from routers.subscriptions import subscriptions
 from routers.oglasi import oglasi
-from routers.oglasi.crud import add_oglas, fetch_oglasi
+from routers.oglasi.crud import fetch_oglasi
 from helpers.update_mongo import update_many
-
+from tasks.crawling import init_short_index_crawling
 
 app = FastAPI()
 app.include_router(auth.router)
 app.include_router(subscriptions.router)
 app.include_router(oglasi.router)
+crochet.setup()
 
 app.add_middleware(
     CORSMiddleware,

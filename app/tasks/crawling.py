@@ -1,6 +1,7 @@
 from scraper.start_spider import start_spider
 from time import sleep
 import datetime
+import crochet
 
 from helpers.email import send_listings_email
 from models.Oglas import Oglas, Zupanija, Naselje, Grad
@@ -80,9 +81,10 @@ def find_eligible_entries(**args):
 #         send_listings_email(items)
 
 
+@crochet.run_in_reactor
 @scheduler.scheduled_job(
     trigger="interval",
-    minutes=30,
+    minutes=60,
     id="short_index_crawl",
     coalesce=True,
     misfire_grace_time=None,
