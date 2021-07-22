@@ -1,14 +1,13 @@
 import motor.motor_asyncio
+from config import config
 
-MONGO_DETAILS = "mongodb://localhost:27017"
-
-client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
+client = motor.motor_asyncio.AsyncIOMotorClient(config.MONGO_URI)
 
 database = client.oglasi
 
-oglasi_collection = database.get_collection("oglasi_collection")
+oglas_collection = database.get_collection("oglasi_collection")
 
-# helpers
+
 def oglas_helper(oglas) -> dict:
     return {
         "id": str(oglas.get("_id")),

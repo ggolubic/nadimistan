@@ -1,5 +1,5 @@
 from bson.objectid import ObjectId
-from helpers.mongo import oglasi_collection, oglas_helper
+from helpers.mongo import oglas_collection, oglas_helper
 
 
 def parse_cijena(cijena: str):
@@ -11,8 +11,8 @@ def parse_cijena(cijena: str):
 
 
 async def update_many():
-    async for oglas in oglasi_collection.find():
-        oglasi_collection.update_one(
+    async for oglas in oglas_collection.find():
+        oglas_collection.update_one(
             {"_id": oglas.get("_id")},
             {"$set": {"cijena_parsed": int(parse_cijena(oglas.get("cijena")))}},
         )
