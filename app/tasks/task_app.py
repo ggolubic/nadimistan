@@ -1,19 +1,16 @@
 import logging
 import os
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.twisted import TwistedScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
-from dotenv import load_dotenv
+from config import config
 
-load_dotenv()
-
-env = os.environ
 logging.basicConfig()
 logging.getLogger("apscheduler").setLevel(logging.DEBUG)
 
-scheduler = BackgroundScheduler(
+scheduler = TwistedScheduler(
     jobstores={
         "default": SQLAlchemyJobStore(
-            url=env.get("SQLALCHEMY_DB_URI"), tablename="jobs"
+            url=config.SQLALCHEMY_DATABASE_URL, tablename="jobs"
         )
     },
     timezone="Europe/Paris",
