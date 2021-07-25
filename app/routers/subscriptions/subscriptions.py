@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
+from pydantic import ValidationError
 
 from helpers.database import get_db
 from . import schemas, crud
@@ -10,7 +11,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/users/{user_id}/subscriptions/",
+    "/users/{user_id}/subscriptions",
     tags=["subscriptions"],
     response_model=schemas.Subscription,
 )
@@ -20,7 +21,7 @@ def create_subscription_for_user(
     db: Session = Depends(get_db),
     user: AuthenticatedUser = Depends(get_current_user),
 ):
-    subscriptions = crud.get_subscriptions(db, user.user_id)
+    subscriptions = crud.get_subscriptions(db, user_id)
     if subscriptions:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -41,7 +42,6 @@ def fetch_user_subscriptions(
     user: AuthenticatedUser = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    print(user)
     subs = crud.get_subscriptions(
         db=db,
         user_id=user_id,
@@ -49,3 +49,20 @@ def fetch_user_subscriptions(
     if not subs:
         return status.HTTP_200_OK
     return subs
+
+
+@router.put("/users/{user_id}/subscriptions/{sub_id}", tags=["subscriptions"])
+def unsubscribe(
+    user_id: int,
+    sub_id: int,
+    user: AuthenticatedUser = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    sub = crud.get_subscriptions(db=db, user_id=user_id)
+    if not sub:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Subscription is already disabled or doesn't exist",
+        )
+    crud.remove_user_subscription(db=db, sub_id=sub_id, user_id=user_id)
+    return Response("Subscription successfully removed", status_code=status.HTTP_200_OK)
