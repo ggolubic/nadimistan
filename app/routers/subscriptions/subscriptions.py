@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.orm import Session
 from pydantic import ValidationError
+import json
 
 from helpers.database import get_db
 from . import schemas, crud
@@ -47,7 +48,7 @@ def fetch_user_subscriptions(
         user_id=user_id,
     )
     if not subs:
-        return status.HTTP_200_OK
+        return Response(content=json.dumps([]), status_code=status.HTTP_200_OK)
     return subs
 
 

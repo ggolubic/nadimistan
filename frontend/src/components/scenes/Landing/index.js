@@ -7,11 +7,11 @@ import Hero from 'components/common/Hero';
 import Login from 'components/scenes/Auth/scenes/Login';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { getCookie } from 'utils/cookie';
-import { setAuthToken, removeAuthToken } from 'utils/api';
+import { setAuthToken } from 'utils/api';
 
 import { PageWrapper, NavBar, Banner, Brief } from './index.styled';
 
-const Landing = ({ location }) => {
+const Landing = props => {
   const history = useHistory();
   const authCtx = useContext(AuthContext);
 
@@ -22,9 +22,6 @@ const Landing = ({ location }) => {
       setAuthToken(token);
       authCtx.getSession();
     }
-    return () => {
-      removeAuthToken();
-    };
   }, []);
 
   useEffect(() => {
@@ -32,8 +29,8 @@ const Landing = ({ location }) => {
       return;
     }
 
-    const { from } = location.state || {
-      from: { pathname: '/' },
+    const { from } = props.location.state || {
+      from: { pathname: props.history.location.pathname || '/' },
     };
 
     if (from.pathname === '/') {

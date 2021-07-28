@@ -1,40 +1,32 @@
 import React, { useState } from 'react';
 
 import { Title } from 'components/common/Typography';
-import useCurrentUser from 'components/services/Auth/useCurrentUser';
 import useSearch from 'components/services/Search/useSearch';
 import Hero from 'components/common/Hero';
 import Button from 'components/common/Button';
 
 import PriceFilter from 'components/common/Filters/Price';
 import SizeFilter from 'components/common/Filters/Size';
+import Header from 'components/common/Header';
 
 import {
   PageWrapper,
-  NavBar,
   HeroContent,
   FormBackground,
   FiltersWrapper,
   SearchInputsWrapper,
 } from './index.styled';
-import UserInfo from './components/UserInfo';
 import FormInput from './components/FormInput';
 import SearchResults from './components/SearchResults';
 
 const Search = () => {
-  const { user } = useCurrentUser();
   const { loadOglasi, loadingOglasi } = useSearch();
   const [form, setForm] = useState({});
   // const notifications=useUnreadNotifications(user.id)
 
   return (
     <PageWrapper>
-      <NavBar>
-        <Title fontSize={36} primaryColor>
-          NađiMiStan
-        </Title>
-        <UserInfo user={user} />
-      </NavBar>
+      <Header />
       <Hero>
         <HeroContent>
           <Title customColor="#fff">Pronađite budući smještaj već danas</Title>
@@ -49,7 +41,7 @@ const Search = () => {
               />
             </FiltersWrapper>
             <SearchInputsWrapper>
-              <FormInput prefix="Zupanija:" onChange={val => setForm({ ...form, zupanija: val })} />
+              <FormInput prefix="Županija:" onChange={val => setForm({ ...form, zupanija: val })} />
               <FormInput prefix="Grad:" onChange={val => setForm({ ...form, grad: val })} />
             </SearchInputsWrapper>
             <Button
