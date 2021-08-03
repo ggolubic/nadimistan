@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Empty from 'antd/lib/empty';
+import Alert from 'antd/lib/alert';
 import Checkbox from 'antd/lib/checkbox';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
@@ -42,20 +43,25 @@ const ActionWrapper = styled.div`
 `;
 
 const Subscriptions = ({ user }) => {
-  const [canCreateNewSub, setCanCreateNewSub] = useState(false);
+  const [canCreateNewSub, setCanCreateNewSub] = useState(!!data.length || false);
   const [m2, setM2] = useState(null);
   const { data, loading, createUserSubscription, updateUserSubscription, disableUserSubscription } =
     useSubscriptions(user);
+  const [actionSuccess, setActionSuccess] = useState(false);
 
   const handleRemoveSub = () => {
     disableUserSubscription(user, data[0].subId);
+    setActionSuccess('Pretplata uspješno obrisana!');
+    setCanCreateNewSub(true);
   };
 
   const handleFinish = values => {
-    if (canCreateNewSub) {
+    if (!data.length) {
       createUserSubscription(user, values);
+      setActionSuccess('Pretplata uspješno kreirana!');
     } else {
       updateUserSubscription(user, data[0].subId, values);
+      setActionSuccess('Pretplata uspješno promjenjena!');
     }
   };
 
@@ -66,11 +72,19 @@ const Subscriptions = ({ user }) => {
       </Wrapper>
     );
   }
-  if ((!data || !data.length) && !canCreateNewSub) {
+  if (canCreateNewSub) {
     return (
       <Wrapper>
-        <Empty>
-          <Button type="primary" onClick={() => setCanCreateNewSub(true)}>
+        {actionSuccess && (
+          <Alert
+            type="success"
+            message={actionSuccess}
+            closable
+            onClose={() => setActionSuccess(false)}
+          />
+        )}
+        <Empty description="Nema postojećih pretplata">
+          <Button type="primary" onClick={() => setCanCreateNewSub(false)}>
             Napravi novu pretplatu
           </Button>
         </Empty>
@@ -79,6 +93,15 @@ const Subscriptions = ({ user }) => {
   }
   return (
     <Wrapper>
+      {actionSuccess && (
+        <Alert
+          type="success"
+          message={actionSuccess}
+          closable
+          banner
+          onClose={() => setActionSuccess(false)}
+        />
+      )}
       <Form
         name="basic"
         labelCol={{
@@ -170,14 +193,14 @@ const Subscriptions = ({ user }) => {
         </Form.Item>
         <Form.Item>
           <ActionWrapper>
-            {!canCreateNewSub && (
+            {!!data.length && (
               <Button type="danger" onClick={handleRemoveSub}>
                 Obriši pretplatu
               </Button>
             )}
 
             <Button type="primary" htmlType="submit">
-              {canCreateNewSub ? 'Dodaj pretplatu' : ' Promijeni pretplatu'}
+              {!data.length ? 'Dodaj pretplatu' : ' Promijeni pretplatu'}
             </Button>
           </ActionWrapper>
         </Form.Item>

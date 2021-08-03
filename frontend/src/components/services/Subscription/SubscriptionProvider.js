@@ -112,14 +112,14 @@ const SubscriptionProvider = ({ children }) => {
     }
   };
 
-  const updateUserSubscription = async (user, values) => {
+  const updateUserSubscription = async (user, subId, values) => {
     dispatch({ type: 'UPDATE_SUBSCRIPTION' });
     try {
       const { data } = await api.put(
-        `/users/${user.id}/subscriptions`,
+        `/users/${user.id}/subscriptions/${subId}`,
         toCreateSubscription(values),
       );
-      dispatch({ type: 'UPDATE_SUBSCRIPTION_SUCCESS', payload: data });
+      dispatch({ type: 'UPDATE_SUBSCRIPTION_SUCCESS', payload: [fromCreateSubscription(data)] });
     } catch (err) {
       dispatch({ type: 'UPDATE_SUBSCRIPTION', error: err });
     }
@@ -128,7 +128,7 @@ const SubscriptionProvider = ({ children }) => {
   const disableUserSubscription = async (user, subId) => {
     dispatch({ type: 'DISABLE_SUBSCRIPTION' });
     try {
-      await api.put(`/users/${user.id}/subscriptions/${subId}`);
+      await api.put(`/users/${user.id}/subscriptions/${subId}/disable`);
       dispatch({ type: 'DISABLE_SUBSCRIPTION_SUCCESS' });
     } catch (err) {
       dispatch({ type: 'DISABLE_SUBSCRIPTION', error: err });
