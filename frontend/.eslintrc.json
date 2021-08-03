@@ -23,7 +23,7 @@
     "no-shadow": "error",
     "react/jsx-fragments": "warn",
     "no-return-await": "error",
-    "react/prop-types":"warn",
+    "react/prop-types":"off",
     "react/no-unescaped-entities":"warn",
     "import/no-anonymous-default-export": "off"
   },
