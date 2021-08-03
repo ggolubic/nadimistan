@@ -34,6 +34,25 @@ def create_user_subscription(
     return db_sub
 
 
+def update_user_subscription(
+    db: Session, sub: schemas.SubscriptionCreate, user_id: int, sub_id: int
+):
+    item = (
+        db.query(models.Subscription)
+        .filter(
+            and_(
+                models.Subscription.user_id == user_id, models.Subscription.id == sub_id
+            )
+        )
+        .first()
+    )
+    print(item)
+    item.config = sub.config
+    item.interval = sub.interval
+    db.commit()
+    return item.columns_to_dict()
+
+
 def remove_user_subscription(db: Session, sub_id: int, user_id: int):
     db.query(models.Subscription).filter(
         and_(models.Subscription.id == sub_id, models.Subscription.user_id == user_id)

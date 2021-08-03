@@ -53,6 +53,30 @@ def fetch_user_subscriptions(
 
 
 @router.put("/users/{user_id}/subscriptions/{sub_id}", tags=["subscriptions"])
+def update_user_subscription(
+    user_id: int,
+    sub_id: int,
+    subscription: schemas.SubscriptionCreate,
+    user: AuthenticatedUser = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    sub = crud.get_subscriptions(db=db, user_id=user_id)
+    if not sub:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Subscription is already disabled or doesn't exist",
+        )
+    updated_sub = crud.update_user_subscription(
+        db=db,
+        sub=subscription,
+        sub_id=sub_id,
+        user_id=user_id,
+    )
+    print(updated_sub)
+    return Response(content=json.dumps(updated_sub), status_code=status.HTTP_200_OK)
+
+
+@router.put("/users/{user_id}/subscriptions/{sub_id}/disable", tags=["subscriptions"])
 def unsubscribe(
     user_id: int,
     sub_id: int,

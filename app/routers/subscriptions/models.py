@@ -19,3 +19,12 @@ class Subscription(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
 
     user = relationship("User", back_populates="subscription")
+
+    def columns_to_dict(self):
+        dict_ = {}
+        for key in self.__mapper__.c.keys():
+            if key == "last_active":
+                dict_[key] = "%Y-%m-%d %H:%M:%S%z".format(getattr(self, key))
+            else:
+                dict_[key] = getattr(self, key)
+        return dict_
