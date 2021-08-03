@@ -46,7 +46,6 @@ def update_user_subscription(
         )
         .first()
     )
-    print(item)
     item.config = sub.config
     item.interval = sub.interval
     db.commit()

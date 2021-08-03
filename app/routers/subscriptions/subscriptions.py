@@ -72,7 +72,6 @@ def update_user_subscription(
         sub_id=sub_id,
         user_id=user_id,
     )
-    print(updated_sub)
     return Response(content=json.dumps(updated_sub), status_code=status.HTTP_200_OK)
 
 
