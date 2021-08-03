@@ -1,7 +1,7 @@
 import React, { useReducer, createContext } from 'react';
 
 import { fromLogin } from 'mappers/auth';
-import api, { setAuthToken } from 'utils/api';
+import api, { setAuthToken, removeAuthToken } from 'utils/api';
 import { removeCookie, setCookie } from 'utils/cookie';
 
 export const AuthContext = createContext({});
@@ -26,6 +26,20 @@ const reducer = (state, action) => {
         ...state,
         loginError: action.error,
         loggingIn: false,
+      };
+    case 'LOGOUT':
+      return {
+        ...state,
+      };
+    case 'LOGOUT_SUCCESS':
+      return {
+        ...state,
+        user: null,
+      };
+    case 'LOGOUT_FAIL':
+      return {
+        ...state,
+        logoutError: action.error,
       };
     default:
       return state;
@@ -61,12 +75,23 @@ const AuthProvider = ({ children }) => {
     try {
       const res = await api.get('http://0.0.0.0:8000/session');
       dispatch({ type: 'LOGIN_SUCCESS', payload: fromLogin(res.data) });
-    } catch (error) {
-      dispatch({ type: 'LOGIN_FAIL', error });
+    } catch (err) {
+      dispatch({ type: 'LOGIN_FAIL', error: err });
     }
   };
 
-  const value = { ...state, login, getSession };
+  const logout = () => {
+    dispatch({ type: 'LOGOUT' });
+    try {
+      removeAuthToken();
+      removeCookie('ath');
+      dispatch({ type: 'LOGOUT_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'LOGOUT_FAIL', error: err });
+    }
+  };
+
+  const value = { ...state, login, getSession, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

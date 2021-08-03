@@ -20,6 +20,7 @@ export const UserWrapper = styled.div`
   right: 0;
   top: 0;
   padding: 10px;
+  cursor: pointer;
 
   .ant-typography {
     display: none;

@@ -43,10 +43,10 @@ const ActionWrapper = styled.div`
 `;
 
 const Subscriptions = ({ user }) => {
-  const [canCreateNewSub, setCanCreateNewSub] = useState(!!data.length || false);
   const [m2, setM2] = useState(null);
   const { data, loading, createUserSubscription, updateUserSubscription, disableUserSubscription } =
     useSubscriptions(user);
+  const [canCreateNewSub, setCanCreateNewSub] = useState(!!data.length || false);
   const [actionSuccess, setActionSuccess] = useState(false);
 
   const handleRemoveSub = () => {
