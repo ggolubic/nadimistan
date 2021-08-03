@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Title } from 'components/common/Typography';
 import useCurrentUser from 'components/services/Auth/useCurrentUser';
@@ -10,9 +11,11 @@ const Header = () => {
   const { user } = useCurrentUser();
   return (
     <NavBar>
-      <Title fontSize={36} primaryColor>
-        NađiMiStan
-      </Title>
+      <Link to="/search">
+        <Title fontSize={36} primaryColor>
+          NađiMiStan
+        </Title>
+      </Link>
       <UserInfo user={user} />
     </NavBar>
   );

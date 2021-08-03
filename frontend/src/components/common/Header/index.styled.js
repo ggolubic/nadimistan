@@ -7,7 +7,7 @@ export const NavBar = styled.div`
   width: 100%;
   align-items: center;
   justify-content: space-around;
-  & > h1 {
+  h1 {
     margin: 0;
     padding: 10px 0;
   }

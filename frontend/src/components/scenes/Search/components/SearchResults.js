@@ -69,7 +69,7 @@ const columns = [
     width: 100,
   },
   {
-    title: 'Velicina',
+    title: 'Veličina',
     dataIndex: 'size',
     width: 100,
     align: 'center',
