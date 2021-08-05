@@ -8,7 +8,7 @@ from config import config
 port = 465
 
 
-def send_registration_email(user):
+def send_registration_email(user, token):
     sender_email = config.SERVICE_EMAIL
     receiver_email = user.email
     password = config.EMAIL_PASSWORD
@@ -19,13 +19,23 @@ def send_registration_email(user):
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    text = f"""
-        Pozdrav {user.full_name},
-        Uspjesno ste se registrirali na stranicu Nadimistan.\n
-        Nadamo se da cete biti uspjesni u potrazi za stanom!
+    url = f"{config.HOSTNAME}/activate?token={token}"
+
+    html = f"""
+    <html>
+    <body>
+    <h3>
+        Pozdrav {user.full_name}, </h3>
+        <p>
+        Registrirali ste se na stranicu Nađimistan.\n
+        Nadamo se da ćete biti uspješni u potrazi za stanom!\n
+        </p>
+        <a href="{url}"">Kliknite na link za verifikaciju računa</>
+        </body>
+        </html>
     """
 
-    part1 = MIMEText(text, "plain")
+    part1 = MIMEText(html, "html")
 
     message.attach(part1)
 
@@ -48,10 +58,6 @@ def send_listings_email(listings=[]):
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    text = """
-        Pozdrav,
-        U nastavku su novoobjavljeni oglasi s vasim kriterijima:\n
-    """
     html = """
         <html>
             <body>
@@ -59,7 +65,7 @@ def send_listings_email(listings=[]):
                 Pozdrav
                 </h1>
                 <h2>
-                U nastavku su novoobjavljeni oglasi s vasim kriterijima:\n\n
+                U nastavku su novoobjavljeni oglasi prema vašim kriterijima:\n\n
                 </h2>
                 <p>
     """
@@ -72,11 +78,9 @@ def send_listings_email(listings=[]):
 
     html += f"</p></body></html>"
 
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
+    part1 = MIMEText(html, "html")
 
     message.attach(part1)
-    message.attach(part2)
 
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
