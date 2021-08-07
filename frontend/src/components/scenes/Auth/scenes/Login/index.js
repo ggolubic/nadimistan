@@ -9,11 +9,11 @@ import Button from 'components/common/Button';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { Wrapper, Actions } from './index.styled';
 
-const Login = () => {
+const Login = ({ location }) => {
   const authCtx = useContext(AuthContext);
 
-  const handleOnFinish = val => {
-    authCtx.login(val.email, val.password);
+  const handleOnFinish = async val => {
+    await authCtx.login(val.email, val.password);
   };
 
   const handleResetPassword = val => {
@@ -22,8 +22,14 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <Title level={3}>Login</Title>
+      <Title level={3}>Prijava</Title>
       {!!authCtx.loginError && <Alert type="error" closable message="Email or password wrong." />}
+      {location.state.activated && (
+        <Alert type="success" closable message="Uspješno aktiviran račun!" />
+      )}
+      {location.state.registered && (
+        <Alert type="success" closable message="Provjerite email za aktivacijski link." />
+      )}
       <Form name="login-form" layout="vertical" onFinish={handleOnFinish} requiredMark={'optional'}>
         <Form.Item
           name="email"
@@ -42,15 +48,15 @@ const Login = () => {
         <Form.Item>
           <Actions>
             <Button type="primary" htmlType="submit" size="large" loading={authCtx.loggingIn}>
-              Log in
+              Prijavi se
             </Button>
             <div>
-              Or <Link href="/register">Register now!</Link>
+              <Link href="/register">Registriraj se!</Link>
             </div>
           </Actions>
         </Form.Item>
         <Button type="link" onClick={handleResetPassword}>
-          I forgot my password
+          Ne znam password
         </Button>
       </Form>
     </Wrapper>

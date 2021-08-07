@@ -9,6 +9,7 @@ import AuthProvider from 'components/services/Auth/AuthProvider';
 import useCurrentUser from 'components/services/Auth/useCurrentUser';
 import SearchProvider from './components/services/Search/SearchProvider';
 import SubscriptionProvider from 'components/services/Subscription/SubscriptionProvider';
+import { ROUTE_CONFIG } from 'consts/routes';
 
 const ProtectedRoute = props => {
   const { user } = useCurrentUser();
@@ -27,10 +28,18 @@ const App = () => (
         <Router>
           <Suspense fallback={<div />}>
             <Switch>
-              <Route path="/" exact component={Landing} />
-              <ProtectedRoute path="/search" component={Search} />
-              <ProtectedRoute path="/profile" component={Profile} />
-              <Route render={() => <Redirect to="/" />} />
+              <Route
+                path={[
+                  ROUTE_CONFIG.AUTH.LOGIN,
+                  ROUTE_CONFIG.AUTH.ACTIVATE,
+                  ROUTE_CONFIG.AUTH.REGISTER,
+                ]}
+                exact
+                component={Landing}
+              />
+              <ProtectedRoute path={ROUTE_CONFIG.SEARCH} component={Search} />
+              <ProtectedRoute path={ROUTE_CONFIG.PROFILE} component={Profile} />
+              <Route render={() => <Redirect to={ROUTE_CONFIG.AUTH.LOGIN} />} />
             </Switch>
           </Suspense>
         </Router>

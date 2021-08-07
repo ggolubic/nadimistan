@@ -1,6 +1,6 @@
 import React, { useReducer, createContext } from 'react';
 
-import { fromLogin } from 'mappers/auth';
+import { fromLogin, toRegistration } from 'mappers/auth';
 import api, { setAuthToken, removeAuthToken } from 'utils/api';
 import { removeCookie, setCookie } from 'utils/cookie';
 
@@ -8,6 +8,43 @@ export const AuthContext = createContext({});
 
 const reducer = (state, action) => {
   switch (action.type) {
+    case 'REGISTRATION':
+      return {
+        ...state,
+        registeringUser: true,
+        registrationError: false,
+      };
+    case 'REGISTRATION_SUCCESS':
+      return {
+        ...state,
+        user: action.payload,
+        registrationError: false,
+        registeringUser: false,
+      };
+    case 'REGISTRATION_FAIL':
+      return {
+        ...state,
+        registrationError: action.error,
+        registeringUser: false,
+      };
+    case 'ACTIVATION':
+      return {
+        ...state,
+        activatingUser: true,
+        activationError: false,
+      };
+    case 'ACTIVATION_SUCCESS':
+      return {
+        ...state,
+        activationError: false,
+        activatingUser: false,
+      };
+    case 'ACTIVATION_FAIL':
+      return {
+        ...state,
+        activationError: action.error,
+        activatingUser: false,
+      };
     case 'LOGIN':
       return {
         ...state,
@@ -49,6 +86,30 @@ const reducer = (state, action) => {
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {});
 
+  const register = async user => {
+    dispatch({ type: 'REGISTRATION' });
+    try {
+      const data = toRegistration(user);
+
+      await api.post('http://0.0.0.0:8000/registration', data);
+
+      dispatch({ type: 'REGISTRATION_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'REGISTRATION_FAIL', error: err.response.data });
+    }
+  };
+
+  const activate = async token => {
+    dispatch({ type: 'ACTIVATION' });
+    try {
+      await api.post(`http://0.0.0.0:8000/activate?token=${token}`);
+
+      dispatch({ type: 'ACTIVATION_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'ACTIVATION_FAIL', error: err });
+    }
+  };
+
   const login = async (email, password) => {
     dispatch({ type: 'LOGIN' });
     try {
@@ -76,7 +137,7 @@ const AuthProvider = ({ children }) => {
       const res = await api.get('http://0.0.0.0:8000/session');
       dispatch({ type: 'LOGIN_SUCCESS', payload: fromLogin(res.data) });
     } catch (err) {
-      dispatch({ type: 'LOGIN_FAIL', error: err });
+      dispatch({ type: 'LOGIN_FAIL' });
     }
   };
 
@@ -91,7 +152,7 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const value = { ...state, login, getSession, logout };
+  const value = { ...state, register, activate, login, getSession, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
