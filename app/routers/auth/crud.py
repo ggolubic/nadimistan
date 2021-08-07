@@ -42,3 +42,11 @@ def activate_user(db: Session, user: schemas.User):
     db_user.is_active = True
     db.commit()
     return db_user
+
+
+def update_password(db: Session, user: schemas.User, password: str):
+    db_user = get_user_by_email(db, user.email)
+    pwd_hash = get_password_hash(password)
+    db_user.hashed_password = pwd_hash
+    db.commit()
+    return db_user

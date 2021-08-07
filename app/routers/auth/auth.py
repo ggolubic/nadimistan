@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import Depends, APIRouter, HTTPException, status
+from fastapi import Depends, APIRouter, HTTPException, status, Body
 from fastapi.security import (
     OAuth2PasswordBearer,
     OAuth2PasswordRequestForm,
@@ -9,7 +9,7 @@ from jose import JWTError, jwt
 from datetime import datetime, timedelta
 
 from helpers.database import get_db, engine
-from helpers.email import send_registration_email
+from helpers.email import send_registration_email, send_reset_password_email
 from config import config
 from . import crud, models, schemas
 
@@ -153,6 +153,54 @@ def activate(token: str, db: Session = Depends(get_db)):
             )
 
         crud.activate_user(db, user)
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@router.post("/reset-password", tags=["auth"], status_code=status.HTTP_201_CREATED)
+def request_reset_password(email: str, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email=email)
+    if not user:
+        raise credentials_exception
+
+    token_data = {
+        "email": str(user.email),
+        "exp": datetime.utcnow() + timedelta(minutes=60),
+    }
+    encoded_jwt = jwt.encode(
+        token_data, config.SECRET_KEY, algorithm=config.HASHING_ALGORITHM
+    )
+
+    send_reset_password_email(
+        user,
+        encoded_jwt,
+    )
+
+
+@router.put("/reset-password", tags=["auth"], status_code=status.HTTP_200_OK)
+def reset_password(
+    token: str, password: str = Body(..., embed=True), db: Session = Depends(get_db)
+):
+    try:
+        data = jwt.decode(
+            token, config.SECRET_KEY, algorithms=[config.HASHING_ALGORITHM]
+        )
+
+        user_email = data.get("email")
+        if user_email is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user = crud.get_user_by_email(db, email=user_email)
+        if user is None or user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
+
+        crud.update_password(db, user, password)
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
