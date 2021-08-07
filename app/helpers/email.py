@@ -19,7 +19,7 @@ def send_registration_email(user, token):
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    url = f"{config.HOSTNAME}/activate?token={token}"
+    url = f"{config.FE_HOSTNAME}/activate/{token}"
 
     html = f"""
     <html>
