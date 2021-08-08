@@ -160,10 +160,14 @@ def activate(token: str, db: Session = Depends(get_db)):
 
 
 @router.post("/reset-password", tags=["auth"], status_code=status.HTTP_201_CREATED)
-def request_reset_password(email: str, db: Session = Depends(get_db)):
+def request_reset_password(
+    email: str = Body(..., embed=True), db: Session = Depends(get_db)
+):
     user = crud.get_user_by_email(db, email=email)
     if not user:
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
 
     token_data = {
         "email": str(user.email),

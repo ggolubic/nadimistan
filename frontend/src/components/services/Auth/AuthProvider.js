@@ -78,6 +78,39 @@ const reducer = (state, action) => {
         ...state,
         logoutError: action.error,
       };
+    case 'REQUEST_RESET_PASSWORD':
+      return {
+        ...state,
+        requestingResetPassword: true,
+      };
+    case 'REQUEST_RESET_PASSWORD_SUCCESS':
+      return {
+        ...state,
+        requestingResetPassword: false,
+        passwordResetRequested: true,
+      };
+    case 'REQUEST_RESET_PASSWORD_FAIL':
+      return {
+        ...state,
+        requestingResetPassword: false,
+        requestingResetPasswordError: action.error,
+      };
+    case 'RESET_PASSWORD':
+      return {
+        ...state,
+        resettingPassword: true,
+      };
+    case 'RESET_PASSWORD_SUCCESS':
+      return {
+        ...state,
+        resettingPassword: false,
+      };
+    case 'RESET_PASSWORD_FAIL':
+      return {
+        ...state,
+        resettingPassword: false,
+        resetPasswordError: action.error,
+      };
     default:
       return state;
   }
@@ -106,7 +139,7 @@ const AuthProvider = ({ children }) => {
 
       dispatch({ type: 'ACTIVATION_SUCCESS' });
     } catch (err) {
-      dispatch({ type: 'ACTIVATION_FAIL', error: err });
+      dispatch({ type: 'ACTIVATION_FAIL', error: err.response.data });
     }
   };
 
@@ -127,7 +160,7 @@ const AuthProvider = ({ children }) => {
       dispatch({ type: 'LOGIN_SUCCESS', payload: fromLogin(res.data) });
     } catch (err) {
       removeCookie('ath');
-      dispatch({ type: 'LOGIN_FAIL', error: err });
+      dispatch({ type: 'LOGIN_FAIL', error: err.response.data });
     }
   };
 
@@ -148,11 +181,42 @@ const AuthProvider = ({ children }) => {
       removeCookie('ath');
       dispatch({ type: 'LOGOUT_SUCCESS' });
     } catch (err) {
-      dispatch({ type: 'LOGOUT_FAIL', error: err });
+      dispatch({ type: 'LOGOUT_FAIL', error: err.response.data });
     }
   };
 
-  const value = { ...state, register, activate, login, getSession, logout };
+  const requestResetPassword = async email => {
+    dispatch({ type: 'REQUEST_RESET_PASSWORD' });
+    try {
+      await api.post('http://0.0.0.0:8000/reset-password', { email });
+      dispatch({ type: 'REQUEST_RESET_PASSWORD_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'REQUEST_RESET_PASSWORD_FAIL', error: err.response.data });
+      throw err;
+    }
+  };
+
+  const resetPassword = async (token, password) => {
+    dispatch({ type: 'RESET_PASSWORD' });
+    try {
+      await api.put(`http://0.0.0.0:8000/reset-password?token=${token}`, { password });
+      dispatch({ type: 'RESET_PASSWORD_SUCCESS' });
+    } catch (err) {
+      dispatch({ type: 'RESET_PASSWORD_FAIL', error: err.response.data });
+      throw err;
+    }
+  };
+
+  const value = {
+    ...state,
+    register,
+    activate,
+    login,
+    getSession,
+    logout,
+    requestResetPassword,
+    resetPassword,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

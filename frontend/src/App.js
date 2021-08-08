@@ -33,6 +33,7 @@ const App = () => (
                   ROUTE_CONFIG.AUTH.LOGIN,
                   ROUTE_CONFIG.AUTH.ACTIVATE,
                   ROUTE_CONFIG.AUTH.REGISTER,
+                  ROUTE_CONFIG.AUTH.RESET_PASSWORD,
                 ]}
                 exact
                 component={Landing}

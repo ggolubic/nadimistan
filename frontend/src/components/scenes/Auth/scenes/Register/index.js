@@ -35,7 +35,7 @@ const Register = () => {
         <Form.Item
           name="fullName"
           label="Ime i Prezime"
-          rules={[{ required: true, message: 'Please fill in your name' }]}
+          rules={[{ required: true, message: 'Unesite ime' }]}
         >
           <Input size="large" />
         </Form.Item>
@@ -45,9 +45,9 @@ const Register = () => {
           rules={[
             {
               type: 'email',
-              message: 'The input is not valid E-mail!',
+              message: 'Nije unesena ispravna email adresa!',
             },
-            { required: true, message: 'Please fill in your email address' },
+            { required: true, message: 'Unesite email adresu' },
           ]}
         >
           <Input size="large" />
@@ -56,8 +56,8 @@ const Register = () => {
           name="password1"
           label="Password"
           rules={[
-            { required: true, message: 'Please fill in your password' },
-            { min: 8, message: 'Zaporka mora imati bar 8 znakova' },
+            { required: true, message: 'Unesite lozinku' },
+            { min: 8, message: 'Lozinka mora imati bar 8 znakova' },
           ]}
         >
           <Input size="large" type="password" />
@@ -67,16 +67,14 @@ const Register = () => {
           label="Confirm password"
           dependencies={['password1']}
           rules={[
-            { required: true, message: 'Please confirm your password' },
+            { required: true, message: 'Potvrdite lozinku' },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('password1') === value) {
                   return Promise.resolve();
                 }
 
-                return Promise.reject(
-                  new Error('The two passwords that you entered do not match!'),
-                );
+                return Promise.reject(new Error('Lozinke koje ste unijeli se ne podudaraju!'));
               },
             }),
           ]}

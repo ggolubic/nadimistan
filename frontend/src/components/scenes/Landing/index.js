@@ -7,6 +7,7 @@ import Hero from 'components/common/Hero';
 import Login from 'components/scenes/Auth/scenes/Login';
 import Register from 'components/scenes/Auth/scenes/Register';
 import Activation from 'components/scenes/Auth/scenes/Activation';
+import ResetPassword from 'components/scenes/Auth/scenes/ResetPassword';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { getCookie } from 'utils/cookie';
 import { setAuthToken } from 'utils/api';
@@ -19,7 +20,8 @@ const Content = () => {
     <Switch>
       <Route exact path={ROUTE_CONFIG.AUTH.LOGIN} component={Login} />
       <Route path={ROUTE_CONFIG.AUTH.REGISTER} component={Register} />
-      <Route path={ROUTE_CONFIG.ACTIVATE} component={Activation} />
+      <Route path={ROUTE_CONFIG.AUTH.ACTIVATE} component={Activation} />
+      <Route path={ROUTE_CONFIG.AUTH.RESET_PASSWORD} component={ResetPassword} />
     </Switch>
   );
 };

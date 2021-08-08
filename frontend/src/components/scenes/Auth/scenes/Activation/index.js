@@ -18,7 +18,7 @@ const Activation = () => {
   const params = useParams();
 
   const handleActivate = async () => {
-    await authCtx.activate(params.token).then();
+    await authCtx.activate(params.token);
     history.replace('/', { activated: true });
   };
 
