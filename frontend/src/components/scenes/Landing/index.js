@@ -1,15 +1,30 @@
 import React, { useEffect, useLayoutEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Switch, Route } from 'react-router-dom';
 import Paragraph from 'antd/lib/typography/Paragraph';
 
 import { Title } from 'components/common/Typography';
 import Hero from 'components/common/Hero';
 import Login from 'components/scenes/Auth/scenes/Login';
+import Register from 'components/scenes/Auth/scenes/Register';
+import Activation from 'components/scenes/Auth/scenes/Activation';
+import ResetPassword from 'components/scenes/Auth/scenes/ResetPassword';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
 import { getCookie } from 'utils/cookie';
 import { setAuthToken } from 'utils/api';
+import { ROUTE_CONFIG } from 'consts/routes';
 
 import { PageWrapper, NavBar, Banner, Brief } from './index.styled';
+
+const Content = () => {
+  return (
+    <Switch>
+      <Route exact path={ROUTE_CONFIG.AUTH.LOGIN} component={Login} />
+      <Route path={ROUTE_CONFIG.AUTH.REGISTER} component={Register} />
+      <Route path={ROUTE_CONFIG.AUTH.ACTIVATE} component={Activation} />
+      <Route path={ROUTE_CONFIG.AUTH.RESET_PASSWORD} component={ResetPassword} />
+    </Switch>
+  );
+};
 
 const Landing = props => {
   const history = useHistory();
@@ -52,7 +67,7 @@ const Landing = props => {
       </NavBar>
       <Hero>
         <Banner>
-          <Login />
+          <Content />
         </Banner>
       </Hero>
       <Brief>

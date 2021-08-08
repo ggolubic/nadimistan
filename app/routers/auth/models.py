@@ -13,7 +13,7 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     is_active = Column(
         Boolean,
-        default=True,
+        default=False,
     )
 
     subscription = relationship("Subscription", back_populates="user")

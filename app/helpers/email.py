@@ -8,29 +8,76 @@ from config import config
 port = 465
 
 
-def send_registration_email(user):
+def send_registration_email(user, token):
     sender_email = config.SERVICE_EMAIL
     receiver_email = user.email
     password = config.EMAIL_PASSWORD
-    subject = "Dobrodosli na nadimistan!"
+    subject = "Dobrodosli na NađiMiStan!"
 
     message = MIMEMultipart("alternative")
     message["From"] = sender_email
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    text = f"""
-        Pozdrav {user.full_name},
-        Uspjesno ste se registrirali na stranicu Nadimistan.\n
-        Nadamo se da cete biti uspjesni u potrazi za stanom!
+    url = f"{config.FE_HOSTNAME}/activate/{token}"
+
+    html = f"""
+    <html>
+    <body>
+    <h3>
+        Pozdrav {user.full_name}, </h3>
+        <p>
+        Registrirali ste se na stranicu NađiMiStan.\n
+        Nadamo se da ćete biti uspješni u potrazi za stanom!\n
+        </p>
+        <a href="{url}"">Kliknite na link za verifikaciju računa</>
+        </body>
+        </html>
     """
 
-    part1 = MIMEText(text, "plain")
+    part1 = MIMEText(html, "html")
 
     message.attach(part1)
 
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+        print(f"Mail sent to {receiver_email}")
+
+
+def send_reset_password_email(user, token):
+    sender_email = config.SERVICE_EMAIL
+    receiver_email = user.email
+    password = config.EMAIL_PASSWORD
+    subject = "Promjena lozinke - NađiMiStan"
+
+    message = MIMEMultipart("alternative")
+    message["From"] = sender_email
+    message["To"] = receiver_email
+    message["Subject"] = subject
+
+    url = f"{config.FE_HOSTNAME}/reset-password/{token}"
+
+    html = f"""
+    <html>
+    <body>
+    <h3>
+        Pozdrav {user.full_name}, </h3>
+        <p>
+        Zatražili ste promjenu lozinke.\n
+        </p>
+        <a href="{url}"">Kliknite na link za promjenu lozinke</>
+        </body>
+        </html>
+    """
+
+    part1 = MIMEText(html, "html")
+
+    message.attach(part1)
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
         print(f"Mail sent to {receiver_email}")
@@ -48,10 +95,6 @@ def send_listings_email(listings=[]):
     message["To"] = receiver_email
     message["Subject"] = subject
 
-    text = """
-        Pozdrav,
-        U nastavku su novoobjavljeni oglasi s vasim kriterijima:\n
-    """
     html = """
         <html>
             <body>
@@ -59,7 +102,7 @@ def send_listings_email(listings=[]):
                 Pozdrav
                 </h1>
                 <h2>
-                U nastavku su novoobjavljeni oglasi s vasim kriterijima:\n\n
+                U nastavku su novoobjavljeni oglasi prema vašim kriterijima:\n\n
                 </h2>
                 <p>
     """
@@ -72,14 +115,12 @@ def send_listings_email(listings=[]):
 
     html += f"</p></body></html>"
 
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
+    part1 = MIMEText(html, "html")
 
     message.attach(part1)
-    message.attach(part2)
 
     context = ssl.create_default_context()
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+    with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
         server.login(sender_email, password)
         server.sendmail(sender_email, receiver_email, message.as_string())
         print(f"Mail sent to {receiver_email}")

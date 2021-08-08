@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from . import models, schemas
-from helpers.email import send_registration_email
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -27,10 +26,27 @@ def get_user_by_email(db: Session, email: str):
 def create_user(db: Session, user: schemas.UserCreate):
     hashed_password = get_password_hash(user.password)
     db_user = models.User(
-        email=user.email, full_name=user.full_name, hashed_password=hashed_password
+        email=user.email,
+        full_name=user.full_name,
+        hashed_password=hashed_password,
+        is_active=False,
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    send_registration_email(db_user)
+    return db_user
+
+
+def activate_user(db: Session, user: schemas.User):
+    db_user = get_user_by_email(db, user.email)
+    db_user.is_active = True
+    db.commit()
+    return db_user
+
+
+def update_password(db: Session, user: schemas.User, password: str):
+    db_user = get_user_by_email(db, user.email)
+    pwd_hash = get_password_hash(password)
+    db_user.hashed_password = pwd_hash
+    db.commit()
     return db_user

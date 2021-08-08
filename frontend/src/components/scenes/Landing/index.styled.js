@@ -20,15 +20,22 @@ export const Banner = styled.div`
   align-self: center;
   justify-content: center;
   text-align: center;
-  margin: 0 auto;
+  margin: 10px auto;
   background-color: #fffbf4;
   border-radius: 5px;
   z-index: 4;
+  min-width: 280px;
   @media only screen and (min-width: 320px) and (max-width: 400px) {
-    min-width: 320px;
+    min-width: 300px;
   }
-  @media only screen and (min-width: 400px) {
+  @media only screen and (min-width: 400px) and (max-width: 768px) {
     min-width: 350px;
+  }
+  @media only screen and (min-width: 768px) {
+    min-width: 450px;
+    > div {
+      margin: 30px;
+    }
   }
 `;
 
@@ -37,7 +44,6 @@ export const Brief = styled.div`
   flex-direction: column;
   text-align: center;
   margin-top: 30px;
-  height: 100%;
   width: 80%;
   max-width: 660px;
   margin: 30px auto;
@@ -53,6 +59,11 @@ export const Brief = styled.div`
   & > h2 {
     font-size: 20px;
     margin-bottom: 30px;
+  }
+  @media only screen and (max-height: 768px) {
+    & > h2 {
+      display: none;
+    }
   }
   @media only screen and (min-width: 768px) and (max-width: 1024px) {
     width: 60%;
