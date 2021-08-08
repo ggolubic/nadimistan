@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 // import 'antd/dist/antd.dark.css';
 import 'antd/dist/antd.css';
-import Landing from 'components/scenes/Landing';
+import Auth from 'components/scenes/Auth';
 import Search from 'components/scenes/Search';
 import Profile from 'components/scenes/Profile';
 import AuthProvider from 'components/services/Auth/AuthProvider';
@@ -36,7 +36,7 @@ const App = () => (
                   ROUTE_CONFIG.AUTH.RESET_PASSWORD,
                 ]}
                 exact
-                component={Landing}
+                component={Auth}
               />
               <ProtectedRoute path={ROUTE_CONFIG.SEARCH} component={Search} />
               <ProtectedRoute path={ROUTE_CONFIG.PROFILE} component={Profile} />
