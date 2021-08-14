@@ -57,3 +57,11 @@ def remove_user_subscription(db: Session, sub_id: int, user_id: int):
         and_(models.Subscription.id == sub_id, models.Subscription.user_id == user_id)
     ).update({"disabled": True})
     db.commit()
+
+
+def get_all_active_subscriptions(db: Session):
+    return (
+        db.query(models.Subscription)
+        .filter(models.Subscription.disabled == False)
+        .all()
+    )

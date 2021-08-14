@@ -7,7 +7,7 @@ import UserInfo from './UserInfo';
 
 import { NavBar } from './index.styled';
 
-const Header = () => {
+const Header = ({ onNotificationClick }) => {
   const { user } = useCurrentUser();
   return (
     <NavBar>
@@ -16,7 +16,7 @@ const Header = () => {
           NađiMiStan
         </Title>
       </Link>
-      <UserInfo user={user} />
+      <UserInfo user={user} onNotificationClick={onNotificationClick} />
     </NavBar>
   );
 };

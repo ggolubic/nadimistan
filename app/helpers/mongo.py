@@ -6,6 +6,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(config.MONGO_URI)
 database = client.oglasi
 
 oglas_collection = database.get_collection("oglasi_collection")
+notification_collection = database.get_collection("notification_collection")
 
 
 def oglas_helper(oglas) -> dict:
@@ -31,4 +32,16 @@ def oglas_helper(oglas) -> dict:
         "active": oglas.get("active"),
         "last_active": oglas.get("last_active"),
         "scraped": oglas.get("scraped"),
+    }
+
+
+def notification_helper(notification) -> dict:
+    return {
+        "id": str(notification.get("_id")),
+        "user_id": notification.get("user_id"),
+        "subscription_id": notification.get("subscription_id"),
+        "listing_ids": notification.get("listing_ids"),
+        "created_at": notification.get("created_at"),
+        "read_at": notification.get("read_at"),
+        "is_read": notification.get("is_read"),
     }

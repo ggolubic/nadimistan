@@ -9,6 +9,7 @@ import AuthProvider from 'components/services/Auth/AuthProvider';
 import useCurrentUser from 'components/services/Auth/useCurrentUser';
 import SearchProvider from './components/services/Search/SearchProvider';
 import SubscriptionProvider from 'components/services/Subscription/SubscriptionProvider';
+import NotificationProvider from 'components/services/Notifications/NotificationProvider';
 import { ROUTE_CONFIG } from 'consts/routes';
 
 const ProtectedRoute = props => {
@@ -24,27 +25,29 @@ const ProtectedRoute = props => {
 const App = () => (
   <AuthProvider>
     <SubscriptionProvider>
-      <SearchProvider>
-        <Router>
-          <Suspense fallback={<div />}>
-            <Switch>
-              <Route
-                path={[
-                  ROUTE_CONFIG.AUTH.LOGIN,
-                  ROUTE_CONFIG.AUTH.ACTIVATE,
-                  ROUTE_CONFIG.AUTH.REGISTER,
-                  ROUTE_CONFIG.AUTH.RESET_PASSWORD,
-                ]}
-                exact
-                component={Auth}
-              />
-              <ProtectedRoute path={ROUTE_CONFIG.SEARCH} component={Search} />
-              <ProtectedRoute path={ROUTE_CONFIG.PROFILE} component={Profile} />
-              <Route render={() => <Redirect to={ROUTE_CONFIG.AUTH.LOGIN} />} />
-            </Switch>
-          </Suspense>
-        </Router>
-      </SearchProvider>
+      <NotificationProvider>
+        <SearchProvider>
+          <Router>
+            <Suspense fallback={<div />}>
+              <Switch>
+                <Route
+                  path={[
+                    ROUTE_CONFIG.AUTH.LOGIN,
+                    ROUTE_CONFIG.AUTH.ACTIVATE,
+                    ROUTE_CONFIG.AUTH.REGISTER,
+                    ROUTE_CONFIG.AUTH.RESET_PASSWORD,
+                  ]}
+                  exact
+                  component={Auth}
+                />
+                <ProtectedRoute path={ROUTE_CONFIG.SEARCH} component={Search} />
+                <ProtectedRoute path={ROUTE_CONFIG.PROFILE} component={Profile} />
+                <Route render={() => <Redirect to={ROUTE_CONFIG.AUTH.LOGIN} />} />
+              </Switch>
+            </Suspense>
+          </Router>
+        </SearchProvider>
+      </NotificationProvider>
     </SubscriptionProvider>
   </AuthProvider>
 );

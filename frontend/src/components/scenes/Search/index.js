@@ -8,7 +8,10 @@ import Button from 'components/common/Button';
 import PriceFilter from 'components/common/Filters/Price';
 import SizeFilter from 'components/common/Filters/Size';
 import Header from 'components/common/Header';
+import NotificationDrawer from 'components/common/NotificationDrawer';
 
+import FormInput from './components/FormInput';
+import SearchResults from './components/SearchResults';
 import {
   PageWrapper,
   HeroContent,
@@ -16,17 +19,16 @@ import {
   FiltersWrapper,
   SearchInputsWrapper,
 } from './index.styled';
-import FormInput from './components/FormInput';
-import SearchResults from './components/SearchResults';
 
 const Search = () => {
   const { loadOglasi, loadingOglasi } = useSearch();
   const [form, setForm] = useState({});
-  // const notifications=useUnreadNotifications(user.id)
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <PageWrapper>
-      <Header />
+      <Header onNotificationClick={() => setDrawerOpen(true)} />
+      <NotificationDrawer isOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
       <Hero>
         <HeroContent>
           <Title customColor="#fff">Pronađite budući smještaj već danas</Title>

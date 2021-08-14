@@ -5,7 +5,7 @@ import crochet
 
 from helpers.email import send_listings_email
 from models.Oglas import Oglas, Zupanija, Naselje, Grad
-from .task_app import scheduler
+from .task_app import scraping_scheduler
 
 
 def find_eligible_entries(**args):
@@ -64,29 +64,11 @@ def find_eligible_entries(**args):
     return query
 
 
-# @scheduler.scheduled_job(
-#     trigger="cron",
-#     hour=17,
-#     minute=0,
-#     # trigger="interval",
-#     # minutes=15,
-#     id="daily_crawl",
-#     coalesce=True,
-#     misfire_grace_time=None,
-# )
-# def init_daily_crawling():
-#     raw = find_eligible_entries(cijena=3000, grad="Split", kat=2)
-#     items = [item for item in raw.dicts()]
-#     if items:
-#         send_listings_email(items)
-
-
 @crochet.run_in_reactor
-@scheduler.scheduled_job(
+@scraping_scheduler.scheduled_job(
     trigger="interval",
     minutes=60,
     id="short_index_crawl",
-    coalesce=True,
     misfire_grace_time=None,
 )
 def init_short_index_crawling():

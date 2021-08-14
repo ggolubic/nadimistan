@@ -6,27 +6,26 @@ from routers.auth.schemas import AuthenticatedUser
 
 from . import crud, schemas
 
-router = APIRouter(tags=["oglasi"], prefix="/oglasi")
+router = APIRouter(tags=["notifications"], prefix="/notifications")
 
 
 @router.get(
     "/",
 )
-async def fetch_oglasi(
-    model: schemas.GETRequestModel = Depends(),
+async def fetch_notifications(
     user: AuthenticatedUser = Depends(get_current_user),
 ):
-    oglasi = await crud.fetch_oglasi(**model.dict())
-    return oglasi
+    notifications = await crud.fetch_notifications(user.id)
+    return notifications
 
 
-@router.get(
-    "/{slug}",
+@router.put(
+    "/{id}",
 )
-async def get_oglas_data(slug):
-    oglas = await crud.retrieve_oglas(slug)
-    if oglas:
-        return oglas
+async def read_notification(id):
+    notification = await crud.update_read(id)
+    if notification:
+        return notification
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
         detail="Doesn't exist",

@@ -95,7 +95,7 @@ const SubscriptionProvider = ({ children }) => {
       const { data } = await api.get(`/users/${user.id}/subscriptions`);
       dispatch({ type: 'LOAD_SUBSCRIPTION_SUCCESS', payload: fromLoadSubscription(data) });
     } catch (err) {
-      dispatch({ type: 'LOAD_SUBSCRIPTION', error: err });
+      dispatch({ type: 'LOAD_SUBSCRIPTION_FAIL', error: err });
     }
   };
 
@@ -108,7 +108,7 @@ const SubscriptionProvider = ({ children }) => {
       );
       dispatch({ type: 'CREATE_SUBSCRIPTION_SUCCESS', payload: [fromCreateSubscription(data)] });
     } catch (err) {
-      dispatch({ type: 'CREATE_SUBSCRIPTION', error: err });
+      dispatch({ type: 'CREATE_SUBSCRIPTION_FAIL', error: err });
     }
   };
 
@@ -121,7 +121,7 @@ const SubscriptionProvider = ({ children }) => {
       );
       dispatch({ type: 'UPDATE_SUBSCRIPTION_SUCCESS', payload: [fromCreateSubscription(data)] });
     } catch (err) {
-      dispatch({ type: 'UPDATE_SUBSCRIPTION', error: err });
+      dispatch({ type: 'UPDATE_SUBSCRIPTION_FAIL', error: err });
     }
   };
 
@@ -131,7 +131,7 @@ const SubscriptionProvider = ({ children }) => {
       await api.put(`/users/${user.id}/subscriptions/${subId}/disable`);
       dispatch({ type: 'DISABLE_SUBSCRIPTION_SUCCESS' });
     } catch (err) {
-      dispatch({ type: 'DISABLE_SUBSCRIPTION', error: err });
+      dispatch({ type: 'DISABLE_SUBSCRIPTION_FAIL', error: err });
     }
   };
 
