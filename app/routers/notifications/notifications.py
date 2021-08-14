@@ -19,7 +19,7 @@ async def fetch_notifications(
     return notifications
 
 
-@router.post(
+@router.put(
     "/{id}",
 )
 async def read_notification(id):
