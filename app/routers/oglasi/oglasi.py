@@ -21,7 +21,7 @@ async def fetch_oglasi(
 
 
 @router.get(
-    "/slug",
+    "/{slug}",
 )
 async def get_oglas_data(slug):
     oglas = await crud.retrieve_oglas(slug)

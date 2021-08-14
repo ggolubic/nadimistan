@@ -1,18 +1,16 @@
-from bson.objectid import ObjectId
 from helpers.mongo import oglas_collection, oglas_helper
 from . import schemas
-from datetime import datetime
 
 
-async def fetch_oglasi(page, per_page, **args):
+async def fetch_oglasi(page=0, per_page=20, **args):
     oglasi = []
     query = {}
     filters = list(filter(lambda x: x[1] != None, args.items()))
     for arg in filters:
         if arg[0] == "cijena":
-            query["cijena_parsed"] = {"$lt": args["cijena"]}
+            query["cijena_parsed"] = {"$lt": args.get("cijena")}
         elif arg[0] == "m2":
-            query["m2"] = {"$gt" if args["m2_greater"] else "$lt": args["m2"]}
+            query["m2"] = {"$gt" if args.get("m2_greater") else "$lt": args.get("m2")}
         elif arg[0].endswith("greater"):
             continue
         else:
@@ -27,6 +25,7 @@ async def retrieve_oglas(link: str) -> dict:
     oglas = await oglas_collection.find_one({"link": link})
     if oglas:
         return oglas_helper(oglas)
+    return False
 
 
 # Update an oglas with a matching link

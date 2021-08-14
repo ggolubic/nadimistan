@@ -4,7 +4,6 @@ import logging
 from datetime import datetime
 
 from routers.oglasi import crud
-from helpers.mongo import oglas_collection
 from config import config
 
 
