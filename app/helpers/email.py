@@ -88,7 +88,7 @@ def send_listings_email(listings=[]):
     sender_email = config.SERVICE_EMAIL
     receiver_email = config.TESTING_RECEIVER_EMAIL
     password = config.EMAIL_PASSWORD
-    subject = "New listings notification"
+    subject = "Novi oglasi!"
 
     message = MIMEMultipart("alternative")
     message["From"] = sender_email
@@ -110,7 +110,6 @@ def send_listings_email(listings=[]):
         title = stan_listing.get("title")
         link = stan_listing.get("link")
         cijena = stan_listing.get("cijena")
-        text += f"{link} {cijena} \n"
         html += f"<a href={link}>{title}</a> {cijena}<br>"
 
     html += f"</p></body></html>"
