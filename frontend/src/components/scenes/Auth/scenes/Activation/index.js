@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   > h1 {
     margin-bottom: 30px;
   }
+  padding: 20px;
 `;
 
 const Activation = () => {

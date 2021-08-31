@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Empty from 'antd/lib/empty';
 import Alert from 'antd/lib/alert';
@@ -46,8 +46,12 @@ const Subscriptions = ({ user }) => {
   const [m2, setM2] = useState(null);
   const { data, loading, createUserSubscription, updateUserSubscription, disableUserSubscription } =
     useSubscriptions(user);
-  const [canCreateNewSub, setCanCreateNewSub] = useState(!!data.length || false);
+  const [canCreateNewSub, setCanCreateNewSub] = useState(data.length === 0 || false);
   const [actionSuccess, setActionSuccess] = useState(false);
+
+  useEffect(() => {
+    setCanCreateNewSub(data.length === 0);
+  }, [data.length]);
 
   const handleRemoveSub = () => {
     disableUserSubscription(user, data[0].subId);
@@ -81,6 +85,7 @@ const Subscriptions = ({ user }) => {
             message={actionSuccess}
             closable
             onClose={() => setActionSuccess(false)}
+            style={{ marginBottom: '20px' }}
           />
         )}
         <Empty description="Nema postojećih pretplata">
@@ -100,6 +105,7 @@ const Subscriptions = ({ user }) => {
           closable
           banner
           onClose={() => setActionSuccess(false)}
+          style={{ marginBottom: '20px' }}
         />
       )}
       <Form

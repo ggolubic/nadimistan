@@ -37,9 +37,8 @@ const Search = () => {
               <PriceFilter value={form.price} onChange={val => setForm({ ...form, price: val })} />
               <SizeFilter
                 value={form.size}
-                onChange={(val, isGreater) =>
-                  setForm({ ...form, size: val, sizeGreater: isGreater })
-                }
+                onValueChange={val => setForm({ ...form, size: val })}
+                onCheckboxChange={val => setForm({ ...form, sizeGreater: val })}
               />
             </FiltersWrapper>
             <SearchInputsWrapper>

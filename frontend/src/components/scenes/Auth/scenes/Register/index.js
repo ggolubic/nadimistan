@@ -54,7 +54,7 @@ const Register = () => {
         </Form.Item>
         <Form.Item
           name="password1"
-          label="Password"
+          label="Lozinka"
           rules={[
             { required: true, message: 'Unesite lozinku' },
             { min: 8, message: 'Lozinka mora imati bar 8 znakova' },
@@ -64,7 +64,7 @@ const Register = () => {
         </Form.Item>
         <Form.Item
           name="password2"
-          label="Confirm password"
+          label="Potvrdite lozinku"
           dependencies={['password1']}
           rules={[
             { required: true, message: 'Potvrdite lozinku' },

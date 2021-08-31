@@ -8,10 +8,10 @@ import DownOutlined from '@ant-design/icons/DownOutlined';
 
 import Button from 'components/common/Button';
 
-const SizeOptions = ({ onChange, handleSetGreater, value }) => (
+const SizeOptions = ({ onValueChange, onCheckboxChange, value }) => (
   <Menu style={{ padding: '10px', borderRadius: '5px' }}>
     <Space direction="vertical">
-      <Select onChange={onChange} name="size" value={value} style={{ width: '100%' }}>
+      <Select onChange={onValueChange} name="size" value={value} style={{ width: '100%' }}>
         <Select.Option value={30}>30 m2</Select.Option>
         <Select.Option value={40}>40 m2</Select.Option>
         <Select.Option value={50}>50 m2</Select.Option>
@@ -24,20 +24,26 @@ const SizeOptions = ({ onChange, handleSetGreater, value }) => (
         <Select.Option value={150}>150 m2</Select.Option>
       </Select>
 
-      <Checkbox onChange={handleSetGreater}>Želim kvadrate od</Checkbox>
+      <Checkbox onChange={onCheckboxChange} disabled={!value}>
+        Želim kvadrate od
+      </Checkbox>
     </Space>
   </Menu>
 );
 
-const SizeFilter = ({ value, onChange }) => {
+const SizeFilter = ({ value, onValueChange, onCheckboxChange }) => {
   const [isGreater, setIsGreater] = useState(false);
+
   return (
     <Dropdown
       overlay={
         <SizeOptions
           value={value}
-          onChange={size => onChange(size, isGreater)}
-          handleSetGreater={() => setIsGreater(!isGreater)}
+          onValueChange={size => onValueChange(size, isGreater)}
+          onCheckboxChange={e => {
+            setIsGreater(e.target.checked);
+            onCheckboxChange(e.target.checked);
+          }}
         />
       }
       trigger={['click']}

@@ -1,10 +1,26 @@
+const removeFalsyValues = object => {
+  let filteredValues = {};
+
+  for (let [key, value] of Object.entries(object)) {
+    if (typeof value === 'string') {
+      value = value?.trim();
+    }
+    if (!!value) {
+      filteredValues[key] = value;
+    }
+  }
+  return filteredValues;
+};
+
 export const toSearch = data => {
+  let filteredValues = removeFalsyValues(data);
+
   return {
-    grad: data.grad,
-    zupanija: data.zupanija,
-    cijena: data.cijena,
-    m2: data.size,
-    m2_greater: data.sizeGreater,
+    grad: filteredValues.grad,
+    zupanija: filteredValues.zupanija,
+    cijena: filteredValues.price,
+    m2: filteredValues.size,
+    m2_greater: filteredValues.sizeGreater,
   };
 };
 

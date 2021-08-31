@@ -128,7 +128,7 @@ const AuthProvider = ({ children }) => {
 
       dispatch({ type: 'REGISTRATION_SUCCESS' });
     } catch (err) {
-      dispatch({ type: 'REGISTRATION_FAIL', error: err.response.data });
+      dispatch({ type: 'REGISTRATION_FAIL', error: err?.response?.data });
     }
   };
 
@@ -139,7 +139,7 @@ const AuthProvider = ({ children }) => {
 
       dispatch({ type: 'ACTIVATION_SUCCESS' });
     } catch (err) {
-      dispatch({ type: 'ACTIVATION_FAIL', error: err.response.data });
+      dispatch({ type: 'ACTIVATION_FAIL', error: err?.response?.data });
     }
   };
 

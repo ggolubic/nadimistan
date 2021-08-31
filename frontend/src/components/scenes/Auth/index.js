@@ -1,12 +1,10 @@
-import React, { useEffect, useLayoutEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useHistory, Switch, Route } from 'react-router-dom';
 import Paragraph from 'antd/lib/typography/Paragraph';
 
 import { Title } from 'components/common/Typography';
 import Hero from 'components/common/Hero';
 import { AuthContext } from 'components/services/Auth/AuthProvider';
-import { getCookie } from 'utils/cookie';
-import { setAuthToken } from 'utils/api';
 import { ROUTE_CONFIG } from 'consts/routes';
 
 import { PageWrapper, NavBar, Banner, Brief } from './index.styled';
@@ -27,23 +25,12 @@ const Landing = props => {
   const history = useHistory();
   const authCtx = useContext(AuthContext);
 
-  useLayoutEffect(() => {
-    const token = getCookie('ath');
-
-    if (token) {
-      setAuthToken(token);
-      authCtx.getSession();
-    }
-  }, []);
-
   useEffect(() => {
     if (!authCtx.user) {
       return;
     }
 
-    const { from } = props.location.state || {
-      from: { pathname: props.history.location.pathname || '/' },
-    };
+    let from = props.location.state?.from || { pathname: props.location.pathname };
 
     if (from.pathname === '/') {
       history.push(`/search`);
@@ -52,6 +39,7 @@ const Landing = props => {
 
     if (!authCtx.loggingIn && !authCtx.loginError && authCtx.user) {
       history.push(from.pathname);
+      return;
     }
   }, [authCtx.loggingIn]);
 
