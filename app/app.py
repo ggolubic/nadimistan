@@ -38,7 +38,7 @@ asyncscheduler.add_job(
 #     init_short_index_crawling,
 #     trigger="interval",
 #     minutes=1,
-#     id="short_index_crawl_v3",
+#     id="short_index_crawl",
 #     coalesce=True,
 #     misfire_grace_time=None,
 # )
@@ -46,6 +46,8 @@ asyncscheduler.start()
 # scraping_scheduler.start()
 atexit.register(lambda: asyncscheduler.shutdown())
 atexit.register(lambda: scraping_scheduler.shutdown())
+
+# init_short_index_crawling()
 
 
 @app.get("/ping")

@@ -24,6 +24,7 @@ class PersistData(object):
         self.db = self.client[self.mongo_db]
 
     def close_spider(self, spider):
+        print("Spider done")
         self.client.close()
 
     def persist_item(self, item):

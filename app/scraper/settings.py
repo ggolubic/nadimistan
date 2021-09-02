@@ -57,7 +57,6 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 FAKEUSERAGENT_PROVIDERS = [
-    "scrapy_fake_useragent.providers.FakeUserAgentProvider",  # this is the first provider we'll try
     "scrapy_fake_useragent.providers.FakerProvider",  # if FakeUserAgentProvider fails, we'll use faker to generate a user-agent string for us
     "scrapy_fake_useragent.providers.FixedUserAgentProvider",  # fall back to USER_AGENT value
 ]
@@ -76,7 +75,7 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ITEM_PIPELINES = {
     "scraper.pipelines.PersistData": 300,
 }
-LOG_ENABLED = False
+LOG_ENABLED = True
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
